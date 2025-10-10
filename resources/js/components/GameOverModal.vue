@@ -13,11 +13,20 @@
     </div>
 </template>
 <script setup>
+import {useSfx} from "../composables/useSfx.js";
+import {onMounted} from "vue";
+
 defineProps({
     winner: String,
     playerX: String,
     playerO: String
 });
+
+const {win} = useSfx();
+
+onMounted(() => {
+    win.play();
+})
 </script>
 <style>
 @reference "tailwindcss";
