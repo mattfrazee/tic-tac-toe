@@ -1,5 +1,5 @@
 <template>
-    <div class="h-full grid grid-rows-[auto_1fr_auto] p-4 gap-4">
+    <div class="h-full grid grid-rows-[auto_1fr_auto] gap-4">
         <PlayerNames v-if="!hasNames" @submit="setNames"/>
         <template v-else>
             <div class="flex flex-col justify-between h-screen bg-[#0b0b1a] text-white">
@@ -65,7 +65,8 @@ function check() {
         }
     }
     if (cells.value.every(Boolean)) {
-        winner.value = 'draw'
+        winner.value = 'draw';
+        saveGame();
     }
 }
 

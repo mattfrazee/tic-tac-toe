@@ -1,5 +1,7 @@
 import {Howl} from 'howler'
+import {ref} from "vue";
 
+const muted = ref(false);
 export function useSfx() {
     const move = new Howl({src: ['/sfx/move.wav'], volume: 1});
     const win = new Howl({src: ['/sfx/win.wav'], volume: 1});
@@ -16,5 +18,15 @@ export function useSfx() {
         notification,
         playerSelect,
         lose,
+        muted,
+        toggleMute() {
+            muted.value = !muted.value;
+            console.log('muted')
+        },
+        play(sfx) {
+            if (sfx && ! muted.value) {
+                sfx.play();
+            }
+        },
     };
 }

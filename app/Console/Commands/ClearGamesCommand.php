@@ -12,7 +12,7 @@ class ClearGamesCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'game:clear';
+    protected $signature = 'game:clear {--force : Skip confirmation prompt and force delete}';
 
     /**
      * The console command description.
@@ -24,10 +24,19 @@ class ClearGamesCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
+        if (! $this->option('force')) {
+            if (! $this->confirm('⚠️  This will delete ALL games and moves. Are you sure you want to continue?')) {
+                $this->info('Operation cancelled.');
+                return self::SUCCESS;
+            }
+        }
+
         DB::table('moves')->truncate();
         DB::table('games')->truncate();
-        $this->info('All game data cleared!');
+        $this->info('✅ All game and move records have been cleared successfully.');
+
+        return self::SUCCESS;
     }
 }

@@ -2,16 +2,16 @@
     <div class="h-full flex flex-col items-center justify-center gap-6 p-6 bg-[#ffe3c3]">
         <img src="/images/logo.png" alt="Tic Tac Toe" class="w-80 h-80 object-contain mb-4"/>
         <div class="flex flex-col gap-3 w-full max-w-sm">
-            <RouterLink class="btn" to="/game" @click="playerSelect.play()">Play</RouterLink>
-            <RouterLink class="btn" to="/scores" @click="click.play()">Scores</RouterLink>
-            <RouterLink class="btn" to="/settings" @click="click.play()">Settings</RouterLink>
+            <RouterLink class="btn" to="/game" @click="play(playerSelect)">Play</RouterLink>
+            <RouterLink class="btn" to="/scores" @click="play(click)">Scores</RouterLink>
+            <RouterLink class="btn" to="/settings" @click="play(click)">Settings</RouterLink>
         </div>
     </div>
 </template>
 <script setup>
 import {useSfx} from "../composables/useSfx.js";
 
-const {playerSelect, gameOver, click} = useSfx();
+const {playerSelect, click, play} = useSfx();
 </script>
 <style>
 @reference "tailwindcss";
