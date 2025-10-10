@@ -23,20 +23,20 @@ import PlayerNames from '../components/PlayerNames.vue'
 import GameOverModal from '../components/GameOverModal.vue'
 import {useSfx} from "../composables/useSfx.js";
 
-const cells = ref(Array(9).fill(null))
-const turn = ref(Math.random() < 0.5 ? 'X' : 'O')
-const winner = ref(null)
-const winningLine = ref(null)
-const playerX = ref('Player X')
-const playerO = ref('Player O')
-const score = ref({X: 0, O: 0})
-const hasNames = ref(false)
-const {move} = useSfx()
+const cells = ref(Array(9).fill(null));
+const turn = ref(Math.random() < 0.5 ? 'X' : 'O');
+const winner = ref(null);
+const winningLine = ref(null);
+const playerX = ref('Player X');
+const playerO = ref('Player O');
+const score = ref({X: 0, O: 0});
+const hasNames = ref(false);
+const {move} = useSfx();
 
 function setNames({x, o}) {
     playerX.value = x;
     playerO.value = o;
-    hasNames.value = true
+    hasNames.value = true;
 }
 
 function play(i) {
