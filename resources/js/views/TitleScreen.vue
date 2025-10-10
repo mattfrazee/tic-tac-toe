@@ -10,8 +10,11 @@
 </template>
 <script setup>
 import {useSfx} from "../composables/useSfx.js";
+import {onMounted} from "vue";
 
-const {playerSelect, click, play} = useSfx();
+const {playerSelect, click, bgJazz, play, playBgMusic} = useSfx();
+
+onMounted(() => playBgMusic(bgJazz));
 </script>
 <style>
 @reference "tailwindcss";
