@@ -16,9 +16,18 @@
                 </transition>
             </button>
         </div>
-        <svg v-if="winningLine" class="absolute inset-0 w-full h-full pointer-events-none">
-            <!-- draw line across winning path in CSS-space; TODO: map line to svg coords -->
-        </svg>
+<!--        <div v-if="winningLine && winningLine[0] === 0 && winningLine[1] === 4 && winningLine[2] === 8" class="absolute w-full h-2 bg-red-500 rotate-45 origin-top-left top-11 left-12 rounded-full"></div>-->
+<!--        <div v-if="winningLine && winningLine[0] === 0 && winningLine[1] === 4 && winningLine[2] === 8" class="absolute w-full h-2 bg-red-500 -rotate-45 origin-top-right top-11 right-12 rounded-full"></div>-->
+<!--        <div v-if="winningLine && winningLine[0] === 0 && winningLine[1] === 4 && winningLine[2] === 8" class="absolute w-10/12 h-2 bg-red-500 rotate-90 bottom-1/2 left-0 rounded-full"></div>-->
+<!--        <svg v-if="winningLine" class="absolute inset-0 w-full h-full pointer-events-none">-->
+<!--            <line-->
+<!--                v-if="winningLine"-->
+<!--                v-bind="getLineCoords(winningLine)"-->
+<!--                class="stroke-[8] stroke-cyan-400 drop-shadow-[0_0_10px_#0ff]"-->
+<!--            >-->
+<!--                <animate attributeName="stroke-dashoffset" from="100" to="0" dur="0.4s" fill="freeze" />-->
+<!--            </line>-->
+<!--        </svg>-->
     </div>
 </template>
 
@@ -28,6 +37,20 @@ defineProps({
     winningLine: Array,
     turn: String
 });
+
+function getLineCoords(type) {
+    const lines = {
+        row0: { x1: '5%', y1: '16.5%', x2: '95%', y2: '16.5%' },
+        row1: { x1: '5%', y1: '50%',  x2: '95%', y2: '50%' },
+        row2: { x1: '5%', y1: '83.5%', x2: '95%', y2: '83.5%' },
+        col0: { x1: '16.5%', y1: '5%',  x2: '16.5%', y2: '95%' },
+        col1: { x1: '50%', y1: '5%',   x2: '50%', y2: '95%' },
+        col2: { x1: '83.5%', y1: '5%',  x2: '83.5%', y2: '95%' },
+        diag1: { x1: '5%', y1: '5%',   x2: '95%', y2: '95%' },
+        diag2: { x1: '95%', y1: '5%',  x2: '5%',  y2: '95%' },
+    };
+    return lines[type];
+}
 </script>
 
 <style>
@@ -43,5 +66,12 @@ defineProps({
 
 .mark-enter-active {
     transition: all .18s ease-out;
+}
+
+line {
+    stroke-linecap: round;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    transition: stroke-dashoffset 0.4s ease-out;
 }
 </style>

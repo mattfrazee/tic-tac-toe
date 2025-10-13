@@ -1,38 +1,63 @@
 <template>
     <div class="h-full flex flex-col items-center justify-center gap-6 p-6 bg-[#ffe3c3]">
-        <img src="/images/logo.png" alt="Tic Tac Toe" class="w-80 h-80 object-contain mb-4"/>
+        <div v-if="! settings.startedApp" class="h-screen absolute inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-purple-600 via-pink-500 to-pink-400 text-white"
+             @click="startGame">
+            <span class="block text-6xl font-extrabold animate-pulse drop-shadow-[0_0_10px_rgba(255,192,203,0.8)] text-center leading-tight">✨<br/>Tap to Start<br/>✨</span>
+
+            <div class="absolute origin-center inset-0 overflow-hidden pointer-events-none">
+  <span v-for="n in 50" :key="n"
+        class="xo animate-xo-fall"
+        :style="{
+          left: `${Math.random() * 300}px`,
+          top: `-100px`,
+          animationDelay: `${Math.random() * 5}s`,
+          fontSize: `${Math.random() * 4 + 1}rem`,
+          fontWeight: `800`,
+          opacity: Math.random() * 0.5 + 0.3,
+          transform: `rotate(${Math.random() * 360}deg)`
+        }">
+    {{ Math.random() > 0.5 ? 'X' : 'O' }}
+  </span>
+            </div>
+        </div>
+        <img alt="Tic Tac Toe" class="size-96 object-contain mb-4" src="/images/logo.png"/>
         <div class="flex flex-col gap-3 w-full max-w-sm">
-            <RouterLink class="btn" to="/game" @click="play(playerSelect)">Play</RouterLink>
-            <RouterLink class="btn" to="/scores" @click="play(click)">Scores</RouterLink>
-            <RouterLink class="btn" to="/settings" @click="play(click)">Settings</RouterLink>
+            <RouterLink class="btn" to="/game" @click="audio.playSound('playerSelect')">Play</RouterLink>
+            <RouterLink class="btn" to="/scores" @click="audio.playSound('click')">Scores</RouterLink>
+            <RouterLink class="btn" to="/settings" @click="audio.playSound('click')">Settings</RouterLink>
         </div>
     </div>
 </template>
 <script setup>
-import {useSfx} from "../composables/useSfx.js";
-import {onMounted} from "vue";
+import {useSettingsStore} from "../stores/settingsStore.js";
+import {useAudioStore} from '../stores/audioStore'
 
-const {playerSelect, click, bgJazz, play, playBgMusic} = useSfx();
+const settings = useSettingsStore();
+const audio = useAudioStore();
 
-onMounted(() => playBgMusic(bgJazz));
+const startGame = () => {
+    settings.startedApp = true;
+    audio.playSound('notification')
+    audio.playMusic('Dry Gin');
+}
 </script>
-<style>
-@reference "tailwindcss";
-
-.btn {
-    /*@apply py-3 rounded-xl bg-zinc-800 text-center font-semibold active:scale-95 shadow-lg shadow-fuchsia-600/20;*/
-    @apply py-4 px-6 rounded-full font-semibold text-white shadow-lg active:scale-95 hover:scale-105 cursor-pointer text-center text-2xl;
-    background: linear-gradient(135deg, #ff6ec4, #7873f5);
-    box-shadow: 0 8px 15px rgba(255, 110, 196, 0.4), 0 4px 6px rgba(120, 115, 245, 0.3);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+<style scoped>
+.xo {
+    position: absolute;
+    color: rgba(255, 255, 255, 0.6);
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
+    user-select: none;
+    animation: xo-fall 8s ease-in-out infinite;
 }
 
-.btn:hover {
-    background: linear-gradient(135deg, #ff85d1, #8a82f7);
-    box-shadow: 0 12px 20px rgba(255, 110, 196, 0.6), 0 6px 10px rgba(120, 115, 245, 0.5);
-}
-
-.btn:active {
-    box-shadow: 0 6px 10px rgba(255, 110, 196, 0.3), 0 3px 5px rgba(120, 115, 245, 0.2);
+@keyframes xo-fall {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(100vw, 100vh) rotate(360deg);
+        opacity: 0;
+    }
 }
 </style>

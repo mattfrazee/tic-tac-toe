@@ -1,5 +1,5 @@
 <template>
-    <div class="h-full grid grid-rows-[auto_1fr_auto] gap-4">
+    <div class="h-full grid gap-4">
         <PlayerNames v-if="!hasNames" @submit="setNames"/>
         <template v-else>
             <div class="flex flex-col justify-between h-screen bg-[#0b0b1a] text-white">
@@ -21,8 +21,9 @@ import Board from '../components/Board.vue'
 import ScoreBoard from '../components/ScoreBoard.vue'
 import PlayerNames from '../components/PlayerNames.vue'
 import GameOverModal from '../components/GameOverModal.vue'
-import {useSfx} from "../composables/useSfx.js";
+import {useAudioStore} from "../stores/audioStore.js";
 
+const audio = useAudioStore();
 const cells = ref(Array(9).fill(null));
 const turn = ref(Math.random() < 0.5 ? 'X' : 'O');
 const winner = ref(null);
@@ -31,7 +32,6 @@ const playerX = ref('Player X');
 const playerO = ref('Player O');
 const score = ref({X: 0, O: 0});
 const hasNames = ref(false);
-const {move} = useSfx();
 
 function setNames({x, o}) {
     playerX.value = x;
@@ -42,7 +42,7 @@ function setNames({x, o}) {
 function play(i) {
     if (cells.value[i] || winner.value) return;
     cells.value[i] = turn.value;
-    move.play();
+    audio.playSound('move');
     check();
     turn.value = turn.value === 'X' ? 'O' : 'X';
 }

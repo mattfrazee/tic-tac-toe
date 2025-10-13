@@ -31,4 +31,13 @@ export default defineConfig({
     ],
     publicDir: 'public',
     base: '/',
+    server: {
+        host: '0.0.0.0',          // allow connections from LAN
+        port: 5173,               // make sure this matches your Vite port
+        cors: true,               // allow cross-origin requests
+        hmr: {
+            host: '10.0.0.194',     // your local network IP (same as Laravel server)
+        },
+        origin: 'http://10.0.0.194:5173', // used for injected @vite/client scripts
+    },
 });

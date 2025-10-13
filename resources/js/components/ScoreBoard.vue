@@ -1,14 +1,14 @@
 <template>
     <div class="flex flex-col justify-between px-4 py-6">
-        <div class="flex flex-col text-center transform rotate-180" v-if="playerO">
+        <div class="flex flex-col text-center transform rotate-180 py-2" v-if="playerO" :class="{'bg-green-800': turn === 'O'}">
             <span class="text-sm opacity-70">O</span>
-            <span class="text-3xl font-bold text-cyan-400">{{ playerO }}</span>
+            <span class="text-3xl font-bold text-cyan-400 line-clamp-1">{{ playerO }}</span>
             <div class="text-2xl font-black text-center">{{ score.O }} : {{ score.X }}</div>
         </div>
 
-        <div class="flex flex-col text-center" v-if="playerX">
+        <div class="flex flex-col text-center py-2" v-if="playerX" :class="{'bg-green-800': turn === 'X'}">
             <span class="text-sm opacity-70">X</span>
-            <span class="text-3xl font-bold text-fuchsia-400">{{ playerX }}</span>
+            <span class="text-3xl font-bold text-fuchsia-400 line-clamp-1">{{ playerX }}</span>
             <div class="text-2xl font-black text-center">{{ score.X }} : {{ score.O }}</div>
         </div>
     </div>

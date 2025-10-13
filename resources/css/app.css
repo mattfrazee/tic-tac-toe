@@ -17,3 +17,65 @@
 html, body, #app {
     @apply h-full bg-[#0a0a0a];
 }
+
+#app {
+    @apply min-h-screen;
+    padding-top: env(safe-area-inset-top);
+    /*padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);*/
+}
+
+.btn {
+    /*@apply py-3 rounded-xl bg-zinc-800 text-center font-semibold active:scale-95 shadow-lg shadow-fuchsia-600/20;*/
+    @apply py-4 px-6 rounded-full font-semibold text-white shadow-lg active:scale-95 hover:scale-105 cursor-pointer text-center text-2xl;
+    background: linear-gradient(135deg, #ff6ec4, #7873f5);
+    box-shadow: 0 8px 15px rgba(255, 110, 196, 0.4), 0 4px 6px rgba(120, 115, 245, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+}
+
+.btn:hover {
+    background: linear-gradient(135deg, #ff85d1, #8a82f7);
+    box-shadow: 0 12px 20px rgba(255, 110, 196, 0.6), 0 6px 10px rgba(120, 115, 245, 0.5);
+}
+
+.btn:active {
+    box-shadow: 0 6px 10px rgba(255, 110, 196, 0.3), 0 3px 5px rgba(120, 115, 245, 0.2);
+}
+
+/* Buttons */
+.btn-primary {
+    @apply bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500
+    text-white font-extrabold py-3 px-6 rounded-full
+    shadow-lg border-2 border-pink-300
+    hover:shadow-pink-400/60 hover:scale-105
+    active:scale-95 transition-all duration-200;
+}
+
+.btn-secondary {
+    @apply bg-[#ffe3c3] text-purple-700 font-bold py-3 px-6 rounded-full
+    border-2 border-pink-300 shadow
+    hover:bg-pink-100 hover:shadow-lg hover:scale-105
+    active:scale-95 transition-all duration-200;
+}
+
+/* Inputs / Forms */
+.form-input {
+    @apply w-full rounded-full py-3 px-5 bg-white/80 text-purple-700
+    placeholder-purple-400 border-2 border-pink-200
+    focus:border-pink-400 focus:ring-2 focus:ring-pink-300
+    outline-none transition-all duration-200 font-semibold shadow-inner;
+}
+
+/* Optional: small pulse animation for primary buttons */
+@keyframes glowPulse {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(255, 192, 203, 0.6), 0 0 20px rgba(255, 105, 180, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 15px rgba(255, 192, 203, 0.8), 0 0 25px rgba(255, 105, 180, 0.6);
+    }
+}
+.btn-primary {
+    animation: glowPulse 2s infinite;
+}
