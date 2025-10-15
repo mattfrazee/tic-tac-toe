@@ -19,7 +19,7 @@ html, body, #app {
 }
 
 #app {
-    @apply min-h-screen;
+    @apply h-screen p-0;
     padding-top: env(safe-area-inset-top);
     /*padding-bottom: env(safe-area-inset-bottom);
     padding-left: env(safe-area-inset-left);
@@ -45,26 +45,40 @@ html, body, #app {
 
 /* Buttons */
 .btn-primary {
-    @apply bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500
-    text-white font-extrabold py-3 px-6 rounded-full
-    shadow-lg border-2 border-pink-300
+    @apply flex items-center justify-center mx-auto text-center text-2xl  font-extrabold py-4 px-10 rounded-full
+    bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500
+    text-white shadow-lg border-2 border-pink-300
     hover:shadow-pink-400/60 hover:scale-105
     active:scale-95 transition-all duration-200;
 }
 
 .btn-secondary {
-    @apply bg-[#ffe3c3] text-purple-700 font-bold py-3 px-6 rounded-full
-    border-2 border-pink-300 shadow
-    hover:bg-pink-100 hover:shadow-lg hover:scale-105
+    @apply flex items-center justify-center mx-auto text-center text-2xl font-extrabold py-4 px-10 rounded-full
+    bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500
+    text-white border-2 border-cyan-300 shadow-lg
+    hover:from-blue-400 hover:via-purple-500 hover:to-pink-500
+    hover:shadow-cyan-400/60 hover:scale-105
     active:scale-95 transition-all duration-200;
+}
+
+.btn-small {
+    @apply py-2 text-lg;
+}
+
+.btn-disabled {
+    @apply cursor-default opacity-40 pointer-events-none;
+}
+
+.btn-glow {
+    animation: glowPulse 2s infinite;
 }
 
 /* Inputs / Forms */
 .form-input {
-    @apply w-full rounded-full py-3 px-5 bg-white/80 text-purple-700
+    @apply w-full rounded-xl py-2.5 px-5 bg-purple-50 text-purple-700
     placeholder-purple-400 border-2 border-pink-200
     focus:border-pink-400 focus:ring-2 focus:ring-pink-300
-    outline-none transition-all duration-200 font-semibold shadow-inner;
+    outline-none transition-all duration-200 font-semibold shadow-inner text-lg;
 }
 
 /* Optional: small pulse animation for primary buttons */
@@ -76,6 +90,4 @@ html, body, #app {
         box-shadow: 0 0 15px rgba(255, 192, 203, 0.8), 0 0 25px rgba(255, 105, 180, 0.6);
     }
 }
-.btn-primary {
-    animation: glowPulse 2s infinite;
-}
+

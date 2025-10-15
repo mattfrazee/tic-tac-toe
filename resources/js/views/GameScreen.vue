@@ -1,5 +1,5 @@
 <template>
-    <div class="h-full grid gap-4">
+    <div class="h-screen gridgap-4 overflow-hidden">
         <PlayerNames v-if="!hasNames" @submit="setNames"/>
         <template v-else>
             <div class="flex flex-col justify-between h-screen bg-[#0b0b1a] text-white">
@@ -13,6 +13,7 @@
             </div>
             <GameOverModal v-if="winner" :winner="winner" :playerX="playerX" :playerO="playerO" @again="reset"/>
         </template>
+        <orientation-warning />
     </div>
 </template>
 <script setup>
@@ -22,6 +23,7 @@ import ScoreBoard from '../components/ScoreBoard.vue'
 import PlayerNames from '../components/PlayerNames.vue'
 import GameOverModal from '../components/GameOverModal.vue'
 import {useAudioStore} from "../stores/audioStore.js";
+import OrientationWarning from "../components/OrientationWarning.vue";
 
 const audio = useAudioStore();
 const cells = ref(Array(9).fill(null));
@@ -95,3 +97,11 @@ async function saveGame() {
     }
 }
 </script>
+
+<style>
+html, body {
+    height: 100vh;
+    overscroll-behavior: none;
+    touch-action: none;
+}
+</style>

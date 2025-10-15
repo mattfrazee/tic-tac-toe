@@ -1,16 +1,19 @@
 <template>
     <form class="p-6 space-y-3 text-center h-screen flex flex-col items-center justify-center" @submit.prevent="submit">
         <h2 class="text-4xl font-bold mb-4">Player Names</h2>
-<!--        <label class="relative block">-->
-            <input v-model="x" class="input" placeholder="Player 1 Name (X's)"/>
-<!--            <span class="text-sm p-2 rounded-lg bg-gray-500 text-black">Player 1</span>-->
-<!--        </label>-->
-        <input v-model="o" class="input" placeholder="Player 2 Name (O's)"/>
-        <div class="flex flex-col gap-3 w-full max-w-sm">
-            <button class="btn" @click="audio.playSound('click')">
+        <label class="relative block w-full">
+            <input v-model="x" class="form-input w-full" placeholder="Player 1 Name (X's)"/>
+            <span class="absolute w-20 left-2 top-2 text-sm p-2 rounded-lg bg-purple-200 font-bold text-purple-400">Player X</span>
+        </label>
+        <label class="relative block w-full">
+            <input v-model="o" class="form-input" placeholder="Player 2 Name (O's)"/>
+            <span class="absolute w-20 left-2 top-2 text-sm p-2 rounded-lg bg-purple-200 font-bold text-purple-400">Player O</span>
+        </label>
+        <div class="flex flex-col gap-4 w-full mt-10">
+            <button class="btn-primary btn-glow w-full" @click="audio.playSound('click')">
                 Start
             </button>
-            <RouterLink class="btn" to="/" @click="audio.playSound('click')">
+            <RouterLink class="btn-secondary w-2/3" to="/" @click="audio.playSound('click')">
                 Back
             </RouterLink>
         </div>
@@ -37,10 +40,11 @@ onMounted(async () => {
     }
 })
 </script>
-<style>
+<style scoped>
 @reference "tailwindcss";
 
-.input {
-    @apply w-full px-4 py-3 rounded-xl bg-zinc-800 outline-none;
+.form-input {
+    /*@apply w-full px-4 py-3 rounded-xl bg-zinc-800 outline-none;*/
+    @apply pl-24;
 }
 </style>

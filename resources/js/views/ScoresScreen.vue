@@ -23,7 +23,7 @@
                     <div class="flex justify-between gap-x-4- items-center text-gray-200">
                         <div class="text-xl text-fuchsia-500 font-black uppercase flex-none mr-4">{{ (game.winner).substring(0,1) }}</div>
                         <div class="text-left flex-1">
-                            <div class="font-semibold">{{ game.player_x_name }} vs. {{ game.player_o_name }}</div>
+                            <div class="font-semibold line-clamp-1">{{ game.player_x_name }} vs. {{ game.player_o_name }}</div>
                             <div class="text-sm text-gray-400">
                                 Winner:
                                 <span v-if="game.winner === 'X'">
@@ -45,21 +45,26 @@
             <div v-if="selectedGame" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
                 <div class="bg-gray-900 rounded-xl p-6 w-80 text-center relative">
                     <button class="absolute top-2 right-3 text-gray-400 hover:text-white" @click="selectedGame = null">✕</button>
-                    <h3 class="text-lg font-bold mb-3 text-cyan-300">
-                        {{ selectedGame.player_x_name }} vs {{ selectedGame.player_o_name }}
-                    </h3>
-                    <div class="grid grid-cols-3 gap-1 w-44 mx-auto">
+                    <div class="text-xl font-bold mb-3 text-cyan-300 line-clamp-1">
+                        {{ selectedGame.player_x_name }} vs. {{ selectedGame.player_o_name }}
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 w-64 mx-auto">
                         <div v-for="(cell, i) in previewBoard" :key="i"
-                             class="w-14 h-14 flex items-center justify-center text-2xl font-bold rounded bg-gray-800">
+                             class="w-20 h-20 flex items-center justify-center text-4xl font-extrabold rounded bg-gray-800">
                             {{ cell }}
                         </div>
+                    </div>
+                    <div class="mt-3 font-bold text-lg">
+                        <span v-if="selectedGame.winner === 'X'">{{ selectedGame.player_x_name }} was the winner!</span>
+                        <span v-else-if="selectedGame.winner === 'O'">{{ selectedGame.player_o_name }} was the winner!</span>
+                        <span v-else>Draw Game</span>
                     </div>
                 </div>
             </div>
 
             <div class="flex flex-col gap-3 w-full fixed bottom-0 left-0 max-w-sm">
                 <div class="w-screen px-6">
-                    <RouterLink class="block my-6 mx-auto btn w-full" to="/" @click="audio.playSound('click')">
+                    <RouterLink class="mb-10 btn-primary" to="/" @click="audio.playSound('click')">
                         Back
                     </RouterLink>
                 </div>
