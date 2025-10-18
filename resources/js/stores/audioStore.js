@@ -1,76 +1,155 @@
 import {defineStore} from 'pinia'
 import {Howl} from 'howler'
 import {useSettingsStore} from "./settingsStore.js";
+import musicFiles from '../data/musicFiles.json'
+import soundFxFiles from '../data/soundFxFiles.json'
 
-const settings = useSettingsStore();console.log('setting', localStorage.getItem('currentBackgroundMusic'))
+const settings = useSettingsStore();
 export const useAudioStore = defineStore('audio', {
     state: () => ({
-        backgroundMusic: null,
+        soundFx: null,
+        soundFxVolume: JSON.parse(localStorage.getItem('soundFxVolume')) || 0.5,
+        soundFxIsPlaying: false,
+
+        music: null,
+        musicVolume: JSON.parse(localStorage.getItem('musicVolume')) || 0.5,
+        currentMusic: JSON.parse(localStorage.getItem('currentMusic')) || Object.keys(musicFiles)[0],
         musicIsPlaying: false,
-        // ffmpeg -i public/music/XXX.mp3 -b:a 96k -ar 44100 -ac 2 public/music/XXX-small.mp3
-        backgroundMusicFiles: {
-            'Deep Urban': '/music/deep-urban-small.mp3',
-            'Dirty Thinking': '/music/dirty-thinkin-small.mp3',
-            'Dry Gin': '/music/dry-gin-small.mp3',
-            'Jazz': '/music/jazz-small.mp3',
-            'Sci-Fi Game': '/music/sci-fi-game-small.mp3',
-            'Walking Dead': '/music/walking-dead-small.mp3',
-            'Vampires in the City': '/music/vampires-in-the-city-small.mp3',
-            'You Got Jazz': '/music/you-got-jazz-small.mp3',
-            'Golden Gate Hip-Hop': '/music/golden-gate-hip-hop-small.mp3',
-            'Games': '/music/games-music-small.mp3',
-            'Fun Jazz': '/music/fun-jazz-small.mp3',
-            'Cyberpunk City': '/music/cyberpunk-city-small.mp3',
-            'Billy the Kid': '/music/billy-the-kid-small.mp3',
-            'Almost Game Time': '/music/almost-game-time-small.mp3',
-            'A Love Affair': '/music/a-love-affair-small.mp3',
-            // other tracks here
-        },
-        currentBackgroundMusic: localStorage.getItem('currentBackgroundMusic') || 'Jazz',
-        soundEffectFiles: {
-            move: '/sfx/move.wav',
-            win: '/sfx/win.wav',
-            click: '/sfx/click-cool-interface.wav',
-            gameOver: '/sfx/retro-game-over.wav',
-            notification: '/sfx/retro-game-notification.wav',
-            playerSelect: '/sfx/player-select.wav',
-            lose: '/sfx/lose.wav',
-        },
+        musicIsPaused: false,
+
+        musicFiles: musicFiles,
+        soundFxFiles: soundFxFiles,
     }),
 
     actions: {
+        resetState() {
+            this.stopSoundFx();
+            this.soundFx = null;
+            this.soundFxVolume = 0.5;
+            this.soundFxIsPlaying = false;
+
+            this.stopMusic();
+            this.music = null;
+            this.musicVolume = 0.5;
+            this.musicIsPlaying = false;
+            this.musicIsPaused = false;
+            this.currentMusic = Object.keys(musicFiles)[0];
+        },
+
         playSound(effect, options = {}) {
-            const file = this.soundEffectFiles[effect];
-            if (!file || !settings.playSoundFx) {
+            const file = this.soundFxFiles[effect];
+            if (!file || !settings.playSoundFx || this.soundFxIsPlaying) {
                 return;
             }
-            const sound = new Howl({src: [file], volume: 1, ...options});
-            sound.play();
+            this.soundFx = new Howl({
+                src: [file],
+                volume: this.soundFxVolume,
+                onplay: () => this.soundFxIsPlaying = true,
+                onend: () => this.soundFxIsPlaying = false,
+                onstop: () => this.soundFxIsPlaying = false,
+                onpause: () => this.soundFxIsPlaying = false,
+                ...options
+            });
+            this.soundFx.play();
+        },
+
+        stopSoundFx() {
+            this.soundFxIsPlaying = false;
+            if (this.soundFx) {
+                this.soundFx.stop();
+            }
+        },
+
+        updateSoundFxVolume(level) {
+            this.soundFxVolume = level;
+            if (this.soundFx) {
+                this.soundFx.volume(level);
+            }
+        },
+
+        stopAudio() {
+            this.stopSoundFx()
+            this.stopMusic()
         },
 
         playMusic(trackKey, options = {}) {
+            if (this.music && ! this.music.playing() && this.musicIsPaused) {
+                this.music.play();
+                return;
+            }
             if (this.musicIsPlaying || !settings.playMusic) {
-                return
+                return;
             }
-            if (this.backgroundMusicFiles[trackKey]) {
-                this.currentBackgroundMusic = trackKey;
+            if (this.musicFiles[trackKey]) {
+                this.currentMusic = trackKey;
             }
-            localStorage.setItem('currentBackgroundMusic', this.currentBackgroundMusic);
-            this.backgroundMusic = new Howl({
-                src: [this.backgroundMusicFiles[this.currentBackgroundMusic]],
-                loop: true,
-                volume: 0.3, // softer background volume
+            this.music = new Howl({
+                src: [this.musicFiles[this.currentMusic]],
+                volume: this.musicVolume,
+                onpause: () => {
+                    this.musicIsPlaying = false
+                    this.musicIsPaused = true
+                },
+                onstop: () => {
+                    this.musicIsPlaying = false
+                    this.musicIsPaused = false
+                },
+                onplay: () => {
+                    this.musicIsPaused = false
+                    this.musicIsPlaying = true
+                },
+                onend: () => {
+                    this.musicIsPlaying = false
+                    if (! settings.loopMusic) {
+                        this.nextTrack();
+                    }
+                },
                 ...options
             });
-            this.backgroundMusic.play();
-            this.musicIsPlaying = true;
+            this.music.play();
+        },
+
+        pauseMusic() {
+            if (this.music) {
+                this.music.pause();
+            }
         },
 
         stopMusic() {
-            if (this.backgroundMusic) {
-                this.backgroundMusic.stop();
-                this.musicIsPlaying = false;
+            this.musicIsPlaying = false;
+            if (this.music) {
+                this.music.stop();
+            }
+        },
+
+        nextTrack() {
+            const keys = Object.keys(this.musicFiles);
+            const currentIndex = keys.indexOf(this.currentMusic);
+            const nextIndex = (currentIndex + 1) % keys.length;
+            this.stopMusic();
+            this.playMusic(keys[nextIndex]);
+        },
+
+        previousTrack() {
+            const keys = Object.keys(this.musicFiles);
+            const currentIndex = keys.indexOf(this.currentMusic);
+            const prevIndex = (currentIndex - 1 + keys.length) % keys.length;
+            this.stopMusic();
+            this.playMusic(keys[prevIndex]);
+        },
+
+        updateMusicVolume(level = 0.5) {
+            this.musicVolume = level;
+            if (this.music) {
+                this.music.volume(level);
             }
         },
     },
 })
+
+useAudioStore().$subscribe((mutation, state) => {
+    const keysToSave = ['soundFxVolume', 'musicVolume', 'currentMusic']
+    keysToSave.forEach(key => {
+        localStorage.setItem(key, JSON.stringify(state[key]))
+    })
+});
