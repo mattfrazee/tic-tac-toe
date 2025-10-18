@@ -4,7 +4,8 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "dev": "vite",
+        "serve": "php artisan serve --host=$(node -p \"Object.values(require('os').networkInterfaces()).flat().find(i => i.family === 'IPv4' && !i.internal)?.address\") --port=8000"
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",
@@ -20,6 +21,7 @@
     },
     "dependencies": {
         "@tailwindcss/cli": "^4.1.14",
+        "dotenv": "^17.2.3",
         "howler": "^2.2.4",
         "pinia": "^3.0.3",
         "vue": "^3.5.22",

@@ -3,6 +3,15 @@ import laravel from 'laravel-vite-plugin';
 import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue'
 import { VitePWA } from 'vite-plugin-pwa'
+import os from 'os';
+import dotenv from 'dotenv';
+
+dotenv.config();
+const networkInterfaces = os.networkInterfaces();
+const localIP = Object.values(networkInterfaces)
+    .flat()
+    .find(details => details.family === 'IPv4' && !details.internal)?.address || '0.0.0.0';
+const vitePort = parseInt(process.env.VITE_PORT || 5174);
 
 export default defineConfig({
     plugins: [
@@ -32,12 +41,14 @@ export default defineConfig({
     publicDir: 'public',
     base: '/',
     server: {
-        host: '0.0.0.0',          // allow connections from LAN
-        port: 5173,               // make sure this matches your Vite port
-        cors: true,               // allow cross-origin requests
+        host: '0.0.0.0',
+        port: vitePort,
+        cors: true,
         hmr: {
-            host: '10.0.0.194',     // your local network IP (same as Laravel server)
+            host: localIP,
+            port: vitePort,
+            protocol: 'ws',
         },
-        origin: 'http://10.0.0.194:5173', // used for injected @vite/client scripts
+        origin: `http://${localIP}:${vitePort}`,
     },
 });
