@@ -1,105 +1,208 @@
 <template>
-    <div class="h-full p-6 space-y-4">
-        <h2 class="text-2xl font-bold text-center">Settings</h2>
-        <div class="space-y-4">
+    <div class="h-full safe-area-container overflow-auto">
+        <div class="h-full p-6">
+            <h2 class="text-4xl font-bold mb-4 text-center">Settings</h2>
+            <div class="space-y-4">
 
-            <div class="text-xl font-bold">Sound</div>
+                <div class="settings-title">Sound Fx</div>
 
-            <Checkbox v-model="settings.playSoundFx"
-                      label="Play Sound FX"
-                      @click.prevent="toggleSoundFx"></Checkbox>
+                <Checkbox v-model="settings.playSoundFx"
+                          label="Enable Sound Fx"
+                          @click.prevent="toggleSoundFx"></Checkbox>
 
-            <Checkbox v-model="settings.playMusic"
-                      label="Play Music"
-                      @click.prevent="toggleMusic"></Checkbox>
-
-            <Dropdown v-model="audio.currentBackgroundMusic"
-                      :options="audio.backgroundMusicFiles"
-                      @change="changeMusic"></Dropdown>
-
-            <div v-if="canVibrate">
-                <div class="text-xl font-bold mb-2 mt-10">
-                    Accessibility
+                <div :class="{'opacity-40 pointer-events-none': ! settings.playSoundFx}">
+                    <div class="text-pink-200 font-semibold text-lg tracking-wide mb-4 flex gap-4 items-baseline">
+                       <div>Volume</div>
+                        <EqualizerBars class="" :height="`${audio.soundFxVolume * 20}px`" :bars="5" :playing="audio.soundFxIsPlaying" />
+                    </div>
+                    <VolumeSlider ref="soundVolumeSlider"
+                                  :initial-volume="audio.soundFxVolume"
+                                  @start-dragging="audio.playSound('retroRun', {loop: true})"
+                                  @stop-dragging="audio.stopSoundFx"
+                                  @volume-changed="(v) => audio.updateSoundFxVolume(v)" />
                 </div>
-                <Checkbox v-model="settings.vibration"
-                          label="Use Haptics/Vibration"
-                          @change="vibrate([200, 50])"></Checkbox>
+
+                <div class="settings-title">
+                    Music
+                </div>
+
+                <Checkbox v-model="settings.playMusic"
+                          label="Enable Music"
+                          @click.prevent="toggleMusic"></Checkbox>
+
+                <div class="flex gap-4 items-center" :class="{'opacity-40 pointer-events-none': ! settings.playMusic}">
+                    <div class="text-pink-200 font-semibold text-lg tracking-wide">
+                        Track:
+                    </div>
+                    <MusicDropdown v-model="audio.currentMusic"
+                                   :music-volume="audio.musicVolume"
+                                   :music-is-playing="audio.musicIsPlaying"
+                                   :options="audio.musicFiles"
+                                   @change="changeMusic" />
+                </div>
+
+                <div :class="{'opacity-40 pointer-events-none': ! settings.playMusic}">
+                    <AudioControls :is-looping="settings.loopMusic"
+                                   :is-playing="audio.musicIsPlaying"
+                                   :is-paused="audio.musicIsPaused"
+                                   @loop="settings.toggleLoopMusic"
+                                   @next="audio.nextTrack"
+                                   @prev="audio.previousTrack"
+                                   @pause="audio.pauseMusic"
+                                   @play="audio.playMusic"
+                                   @stop="audio.stopMusic" />
+                </div>
+
+                <div :class="{'opacity-40 pointer-events-none': ! settings.playMusic}">
+                    <div class="text-pink-200 font-semibold text-lg tracking-wide mb-4">
+                        Volume
+                    </div>
+                    <VolumeSlider class="mb-6"
+                                  ref="musicVolumeSlider"
+                                  :initialVolume="audio.musicVolume"
+                                  @start-dragging="audio.playMusic"
+                                  @volume-changed="(v) => audio.updateMusicVolume(v)" />
+                </div>
+
+                <div v-if="canVibrate">
+                    <div class="settings-title mb-4">
+                        Accessibility
+                    </div>
+                    <Checkbox v-model="settings.vibration"
+                              label="Use Haptics/Vibration"
+                              @click.prevent="toggleVibration" />
+                </div>
+
+                <div class="settings-title">
+                    Data
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <button :disabled="isClearing"
+                                class="btn-primary w-full btn-small"
+                                type="button"
+                                @click="openClearScoresModal">
+                            {{ isClearing ? 'Clearing...' : 'Clear Scoreboard' }}
+                        </button>
+
+                        <Transition
+                            enter-active-class="transition ease-out duration-300"
+                            enter-from-class="opacity-0 scale-95 -translate-y-5"
+                            enter-to-class="opacity-100 scale-100 translate-y-0"
+                            leave-active-class="transition ease-in duration-200"
+                            leave-from-class="opacity-100 scale-100 translate-y-0"
+                            leave-to-class="opacity-0 scale-95 -translate-y-5"
+                        >
+                            <p v-if="message" class="text-pink-300 text-center mt-2">
+                                {{ message }}
+                            </p>
+                        </Transition>
+                        <ConfirmModal
+                            :visible="showClearScoresConfirm"
+                            message="This will permanently delete all saved games and moves."
+                            title="Clear all scores?"
+                            @cancel="showClearScoresConfirm = false"
+                            @confirm="clearScores"
+                        />
+                    </div>
+
+                    <div>
+                        <button :disabled="isClearing" class="btn-primary w-full btn-small" type="button" @click="openResetSettingsModal">
+                            Reset Settings
+                        </button>
+                        <ConfirmModal
+                            :visible="showResetSettingsConfirm"
+                            message="This will reset all game settings. This does not clear scores."
+                            title="Reset Settings?"
+                            @cancel="showResetSettingsConfirm = false"
+                            @confirm="resetSettings"
+                        />
+                    </div>
+                </div>
+
             </div>
 
-            <div class="text-xl font-bold mt-10">Data</div>
-
-            <div>
-                <button :disabled="isClearing"
-                        class="btn-primary w-full btn-small"
-                        type="button"
-                        @click="audio.playSound('click'); showConfirm = true">
-                    {{ isClearing ? 'Clearing...' : 'Clear Scoreboard' }}
-                </button>
-                <p v-if="message" class="text-pink-300 mt-2">{{ message }}</p>
-                <ConfirmModal
-                    :visible="showConfirm"
-                    message="This will permanently delete all saved games and moves."
-                    title="Clear all scores?"
-                    @cancel="showConfirm = false"
-                    @confirm="clearScores"
-                />
-            </div>
-
-            <div>
-                <button class="btn-primary w-full btn-small" type="button" @click="audio.playSound('click')">
-                    Reset Settings
-                </button>
+            <div class="pb-8">
+                <RouterLink class="btn-primary btn-glow w-full mt-12" to="/" @click="audio.playSound('click')">
+                    Back
+                </RouterLink>
             </div>
         </div>
-        <RouterLink class="btn-primary btn-glow w-full mt-12" to="/" @click="audio.playSound('click')">
-            Back
-        </RouterLink>
     </div>
 </template>
 <script setup>
+import {onMounted, onUnmounted, ref} from "vue";
+import {useVibration} from "../composables/useVibration.js";
 import {useSettingsStore} from "../stores/settingsStore.js";
 import {useAudioStore} from "../stores/audioStore.js";
-import {useVibration} from "../composables/useVibration.js";
-import Dropdown from "../components/Dropdown.vue";
 import Checkbox from "../components/Checkbox.vue";
-import {ref} from "vue";
 import ConfirmModal from "../components/ConfirmModal.vue";
+import VolumeSlider from "../components/VolumeSlider.vue";
+import AudioControls from "../components/AudioControls.vue";
+import MusicDropdown from "../components/MusicDropdown.vue";
+import EqualizerBars from "../components/EqualizerBars.vue";
 
 const settings = useSettingsStore();
 const audio = useAudioStore();
 const {canVibrate, vibrate} = useVibration();
-const isClearing = ref(false)
-const showConfirm = ref(false)
-const message = ref(null)
+const isClearing = ref(false);
+const showClearScoresConfirm = ref(false);
+const showResetSettingsConfirm = ref(false);
+const message = ref(null);
+const soundVolumeSlider = ref(null);
+const musicVolumeSlider = ref(null);
 
-const clearScores = async () => {
-    isClearing.value = true
-    try {
-        const {data} = await axios.delete('/api/games/clear')
-        message.value = data.message
-    } catch (error) {
-        message.value = error.response?.data?.message || 'Something went wrong.'
-    } finally {
-        isClearing.value = false
-        showConfirm.value = false
-    }
-}
 const toggleMusic = () => {
-    audio.playSound('click');
+    audio.playSound('switch');
     settings.toggleMusic();
     audio.stopMusic();
     if (settings.playMusic) {
         audio.playMusic();
     }
 }
-
 const toggleSoundFx = () => {
-    audio.playSound('click');
+    audio.playSound('switch');
     settings.toggleSoundFx();
+}
+const toggleVibration = () => {
+    audio.playSound('switch');
+    vibrate([200, 50]);
+    settings.toggleVibration();
 }
 
 const changeMusic = () => {
     audio.stopMusic();
     audio.playMusic();
 }
+
+const openClearScoresModal = () => {
+    audio.playSound('click');
+    showClearScoresConfirm.value = true
+}
+const openResetSettingsModal = () => {
+    audio.playSound('click');
+    showResetSettingsConfirm.value = true;
+}
+
+const resetSettings = () => {
+    settings.resetState();
+    audio.resetState();
+    showResetSettingsConfirm.value = false;
+}
+const clearScores = async () => {
+    isClearing.value = true;
+    try {
+        const {data} = await axios.delete('/api/games/clear');
+        message.value = data.message;
+    } catch (error) {
+        message.value = error.response?.data?.message || 'Something went wrong.';
+    } finally {
+        isClearing.value = false;
+        showClearScoresConfirm.value = false;
+        setTimeout(() => message.value = null, 8000);
+    }
+}
+
+onMounted(() => document.querySelector('html').classList.add('safe-area', 'non-scrollable'))
+onUnmounted(() => document.querySelector('html').classList.remove('safe-area', 'non-scrollable'))
 </script>

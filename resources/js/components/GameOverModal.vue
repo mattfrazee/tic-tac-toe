@@ -17,7 +17,7 @@
                     Play again
                 </button>
                 <RouterLink class="btn-secondary btn-small" to="/" @click="audio.playSound('click')">
-                    Back
+                    Main Menu
                 </RouterLink>
             </div>
         </div>

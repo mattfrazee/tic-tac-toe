@@ -9,7 +9,7 @@
             <input v-model="o" class="form-input" placeholder="Player 2 Name (O's)"/>
             <span class="absolute w-20 left-2 top-2 text-sm p-2 rounded-lg bg-purple-200 font-bold text-purple-400">Player O</span>
         </label>
-        <div class="flex flex-col gap-4 w-full mt-10">
+        <div class="flex flex-col gap-4 w-full sm:w-1/2 my-10">
             <button class="btn-primary btn-glow w-full" @click="audio.playSound('click')">
                 Start
             </button>

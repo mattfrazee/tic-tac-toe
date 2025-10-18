@@ -1,15 +1,14 @@
 <template>
     <Transition
         enter-active-class="transition ease-out duration-300"
-        enter-from-class="opacity-0 scale-95"
-        enter-to-class="opacity-100 scale-100"
+        enter-from-class="opacity-0 scale-95 translate-y-10"
+        enter-to-class="opacity-100 scale-100 translate-y-0"
         leave-active-class="transition ease-in duration-200"
-        leave-from-class="opacity-100 scale-100"
-        leave-to-class="opacity-0 scale-95"
-    >
+        leave-from-class="opacity-100 scale-100 translate-y-0"
+        leave-to-class="opacity-0 scale-95 translate-y-10">
         <div v-if="visible"
             class="fixed inset-0 flex items-center justify-center bg-black/70 z-50">
-            <div class="bg-gray-900 rounded-lg shadow-xl p-6 w-80 text-center text-white">
+            <div class="bg-gray-900 rounded-lg shadow-xl p-6 w-5/6 text-center text-white">
                 <h2 class="text-xl font-semibold mb-3">
                     {{ title }}
                 </h2>
@@ -17,15 +16,15 @@
                     {{ message }}
                 </p>
 
-                <div class="mt-8 space-y-4">
-                    <button class="btn-primary"
+                <div class="mt-8 space-y-4 mb-4">
+                    <button class="btn-primary mx-auto"
                         @click="audio.playSound('click'); $emit('confirm')">
-                        Yes, Clear
+                        {{ confirmButtonText }}
                     </button>
 
-                    <button class="btn-secondary btn-small"
+                    <button class="btn-secondary btn-small mx-auto"
                         @click="audio.playSound('click'); $emit('cancel')">
-                        Cancel
+                        {{ cancelButtonText }}
                     </button>
                 </div>
             </div>
@@ -43,6 +42,14 @@ defineProps({
     title: {
         type: String,
         default: 'Are you sure?',
+    },
+    confirmButtonText: {
+        type: String,
+        default: "Yes, I’m sure",
+    },
+    cancelButtonText: {
+        type: String,
+        default: 'Cancel',
     },
     message: {
         type: String,

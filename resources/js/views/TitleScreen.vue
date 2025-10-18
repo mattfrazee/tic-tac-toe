@@ -48,6 +48,7 @@
 import {useSettingsStore} from "../stores/settingsStore.js";
 import {useAudioStore} from '../stores/audioStore'
 import OrientationWarning from "../components/OrientationWarning.vue";
+import {onMounted, onUnmounted} from "vue";
 
 const settings = useSettingsStore();
 const audio = useAudioStore();
@@ -57,6 +58,9 @@ const startGame = () => {
     audio.playSound('notification')
     audio.playMusic();
 }
+
+onMounted(() => document.querySelector('html').classList.add('non-scrollable'))
+onUnmounted(() => document.querySelector('html').classList.remove('non-scrollable'))
 </script>
 <style scoped>
 .xo {

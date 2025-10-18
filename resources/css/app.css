@@ -20,9 +20,18 @@ html, body, #app {
 
 #app {
     @apply h-screen p-0;
+}
+
+html.non-scrollable, html.non-scrollable body {
+    height: 100vh;
+    overscroll-behavior: none;
+    touch-action: none;
+}
+
+html.safe-area .safe-area-container {
     padding-top: env(safe-area-inset-top);
-    /*padding-bottom: env(safe-area-inset-bottom);
-    padding-left: env(safe-area-inset-left);
+    padding-bottom: env(safe-area-inset-bottom);
+    /*padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);*/
 }
 
@@ -45,7 +54,7 @@ html, body, #app {
 
 /* Buttons */
 .btn-primary {
-    @apply flex items-center justify-center mx-auto text-center text-2xl  font-extrabold py-4 px-10 rounded-full
+    @apply flex items-center justify-center text-center text-2xl  font-extrabold py-4 px-10 rounded-full
     bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500
     text-white shadow-lg border-2 border-pink-300
     hover:shadow-pink-400/60 hover:scale-105
@@ -53,7 +62,7 @@ html, body, #app {
 }
 
 .btn-secondary {
-    @apply flex items-center justify-center mx-auto text-center text-2xl font-extrabold py-4 px-10 rounded-full
+    @apply flex items-center justify-center text-center text-2xl font-extrabold py-4 px-10 rounded-full
     bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500
     text-white border-2 border-cyan-300 shadow-lg
     hover:from-blue-400 hover:via-purple-500 hover:to-pink-500
@@ -89,5 +98,9 @@ html, body, #app {
     50% {
         box-shadow: 0 0 15px rgba(255, 192, 203, 0.8), 0 0 25px rgba(255, 105, 180, 0.6);
     }
+}
+
+.settings-title {
+    @apply text-xl font-bold mt-10 px-4 py-2 bg-pink-700 rounded-xl;
 }
 

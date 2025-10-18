@@ -1,8 +1,8 @@
 <template>
-    <div class="h-screen gridgap-4 overflow-hidden">
+    <div class="safe-area-container h-screen">
         <PlayerNames v-if="!hasNames" @submit="setNames"/>
         <template v-else>
-            <div class="flex flex-col justify-between h-screen bg-[#0b0b1a] text-white">
+            <div class="flex flex-col justify-between h-full bg-[#0b0b1a] text-white">
                 <ScoreBoard :playerO="playerO" :score="score" :turn="turn"/>
 
                 <div class="flex-1 flex justify-center items-center">
@@ -13,11 +13,11 @@
             </div>
             <GameOverModal v-if="winner" :winner="winner" :playerX="playerX" :playerO="playerO" @again="reset"/>
         </template>
-        <orientation-warning />
+        <OrientationWarning />
     </div>
 </template>
 <script setup>
-import {ref} from 'vue'
+import {onMounted, onUnmounted, ref} from 'vue'
 import Board from '../components/Board.vue'
 import ScoreBoard from '../components/ScoreBoard.vue'
 import PlayerNames from '../components/PlayerNames.vue'
@@ -96,12 +96,7 @@ async function saveGame() {
         console.error('Failed to save game', e)
     }
 }
-</script>
 
-<style>
-html, body {
-    height: 100vh;
-    overscroll-behavior: none;
-    touch-action: none;
-}
-</style>
+onMounted(() => document.querySelector('html').classList.add('non-scrollable', 'safe-area'));
+onUnmounted(() => document.querySelector('html').classList.remove('non-scrollable', 'safe-area'));
+</script>
