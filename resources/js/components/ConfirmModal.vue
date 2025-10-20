@@ -7,7 +7,7 @@
         leave-from-class="opacity-100 scale-100 translate-y-0"
         leave-to-class="opacity-0 scale-95 translate-y-10">
         <div v-if="visible"
-            class="fixed inset-0 flex items-center justify-center bg-black/70 z-50">
+             class="fixed inset-0 flex items-center justify-center bg-black/70 z-50">
             <div class="bg-gray-900 rounded-lg shadow-xl p-6 w-5/6 text-center text-white">
                 <h2 class="text-xl font-semibold mb-3">
                     {{ title }}
@@ -17,15 +17,18 @@
                 </p>
 
                 <div class="mt-8 space-y-4 mb-4">
-                    <button class="btn-primary mx-auto"
-                        @click="audio.playSound('click'); $emit('confirm')">
-                        {{ confirmButtonText }}
-                    </button>
-
-                    <button class="btn-secondary btn-small mx-auto"
-                        @click="audio.playSound('click'); $emit('cancel')">
-                        {{ cancelButtonText }}
-                    </button>
+                    <SoundFxEvent file="click">
+                        <button class="btn-primary w-full mx-auto"
+                                @click="$emit('confirm')">
+                            {{ confirmButtonText }}
+                        </button>
+                    </SoundFxEvent>
+                    <SoundFxEvent file="click">
+                        <button class="btn-secondary btn-small mx-auto"
+                                @click="$emit('cancel')">
+                            {{ cancelButtonText }}
+                        </button>
+                    </SoundFxEvent>
                 </div>
             </div>
         </div>
@@ -33,9 +36,7 @@
 </template>
 
 <script setup>
-import {useAudioStore} from "../stores/audioStore.js";
-
-const audio = useAudioStore();
+import SoundFxEvent from "./SoundFxEvent.vue";
 
 defineProps({
     visible: Boolean,
@@ -56,5 +57,6 @@ defineProps({
         default: 'This action cannot be undone.',
     },
 })
+
 defineEmits(['confirm', 'cancel'])
 </script>

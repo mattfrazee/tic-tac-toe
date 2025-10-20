@@ -3,7 +3,7 @@
         <!-- Button -->
         <button class="w-full bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-center text-white
         font-extrabold py-3 px-6  rounded-full shadow-xl flex items-center justify-between transition-all
-        duration-200 border-2 border-pink-300 hover:shadow-pink-400/50 text-lg z-10 relative"
+        duration-200 border-2 border-pink-300 hover:shadow-pink-400/50 text-lg relative"
                 :class="{'pl-13': musicIsPlaying}"
                 @click="toggleDropdown"
                 @keydown.esc="open = false">
@@ -28,7 +28,7 @@
                     leave-active-class="transition-opacity duration-300 ease-in-out">
             <ul v-if="open"
                 class="absolute left-0 right-0 mt-2 bg-[rgba(40,0,60,0.95)] rounded-2xl shadow-2xl overflow-auto max-h-[400px] z-50 border-2 border-pink-400/40 backdrop-blur-md
-                       ring-1 ring-pink-400/30 z-10">
+                       ring-1 ring-pink-400/30">
                 <li v-for="(path, name) in options" :key="name"
                     :class="{
                         'text-pink-400 bg-purple-600/50': label === name,
@@ -47,7 +47,7 @@
                 </li>
             </ul>
         </transition>
-        <div class="fixed w-screen h-screen bg-white/80 left-0 top-0" v-if="open" @click="open = false"></div>
+        <div class="fixed w-screen h-screen left-0 top-0" v-if="open" @click="open = false"></div>
     </div>
 </template>
 

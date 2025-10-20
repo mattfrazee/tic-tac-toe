@@ -8,11 +8,11 @@ const settings = useSettingsStore();
 export const useAudioStore = defineStore('audio', {
     state: () => ({
         soundFx: null,
-        soundFxVolume: JSON.parse(localStorage.getItem('soundFxVolume')) || 0.5,
+        soundFxVolume: JSON.parse(localStorage.getItem('soundFxVolume')) ?? 0.5,
         soundFxIsPlaying: false,
 
         music: null,
-        musicVolume: JSON.parse(localStorage.getItem('musicVolume')) || 0.5,
+        musicVolume: JSON.parse(localStorage.getItem('musicVolume')) ?? 0.5,
         currentMusic: JSON.parse(localStorage.getItem('currentMusic')) || Object.keys(musicFiles)[0],
         musicIsPlaying: false,
         musicIsPaused: false,
@@ -20,6 +20,20 @@ export const useAudioStore = defineStore('audio', {
         musicFiles: musicFiles,
         soundFxFiles: soundFxFiles,
     }),
+
+    getters: {
+        isSoundFxPlaying: (state) => {
+            return state.soundFxIsPlaying
+                && Howler._howls.filter(s => s._src.indexOf('/sfx/') === 0 && s.playing()).length > 0
+        },
+        isMusicPlaying: (state) => {
+            return state.musicIsPlaying
+                && Howler._howls.filter(s => s._src.indexOf('/music/') === 0 && s.playing()).length > 0
+        },
+        isAudioPlaying: (state) => {
+            return this.isSoundFxPlaying(state) || this.isMusicPlaying(state)
+        }
+    },
 
     actions: {
         resetState() {
@@ -39,6 +53,7 @@ export const useAudioStore = defineStore('audio', {
         playSound(effect, options = {}) {
             const file = this.soundFxFiles[effect];
             if (!file || !settings.playSoundFx || this.soundFxIsPlaying) {
+                console.log('dont playSound')
                 return;
             }
             this.soundFx = new Howl({
@@ -51,6 +66,7 @@ export const useAudioStore = defineStore('audio', {
                 ...options
             });
             this.soundFx.play();
+            console.log('playSound')
         },
 
         stopSoundFx() {
@@ -58,6 +74,7 @@ export const useAudioStore = defineStore('audio', {
             if (this.soundFx) {
                 this.soundFx.stop();
             }
+            console.log('stopSoundFx')
         },
 
         updateSoundFxVolume(level) {
@@ -65,7 +82,20 @@ export const useAudioStore = defineStore('audio', {
             if (this.soundFx) {
                 this.soundFx.volume(level);
             }
+            console.log('updateSoundFxVolume')
         },
+
+        // isAudioPlaying() {
+        //     return this.isSoundFxPlaying() || this.isMusicPlaying()
+        // },
+
+        // isSoundFxPlaying() {
+        //     return Howler._howls.filter(s => s._src.indexOf('/sfx/') === 0 && s.playing()).length > 0
+        // },
+
+        // isMusicPlaying() {
+        //     return Howler._howls.filter(s => s._src.indexOf('/music/') === 0 && s.playing()).length > 0
+        // },
 
         stopAudio() {
             this.stopSoundFx()

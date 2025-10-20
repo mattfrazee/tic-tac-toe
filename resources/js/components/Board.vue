@@ -5,14 +5,10 @@
                     class="aspect-square rounded-2xl bg-zinc-800 flex items-center justify-center active:scale-95"
                     @click="$emit('play', i)">
                 <transition appear name="mark">
-                    <!--                  <span v-if="c" :class="c==='X'?'text-fuchsia-400':'text-cyan-400'" class="text-5xl font-black">-->
-                    <!--                    {{ c }}-->
-                    <!--                  </span>-->
-                    <span v-if="c" :class="[
-                            'text-5xl font-black drop-shadow-[0_0_8px_var(--color)]',
-                            c==='X' ? 'text-fuchsia-400' : 'text-cyan-400'
-                        ]"
-                          :style="{ '--color': c==='X' ? '#f0f' : '#0ff' }">{{ c }}</span>
+                    <span v-if="c" class="text-5xl font-black drop-shadow-[0_0_20px]" :class="{
+                        'text-fuchsia-400 drop-shadow-fuchsia-400': c === 'X',
+                        'text-cyan-400 drop-shadow-cyan-400': c !== 'X'
+                    }">{{ c }}</span>
                 </transition>
             </button>
         </div>

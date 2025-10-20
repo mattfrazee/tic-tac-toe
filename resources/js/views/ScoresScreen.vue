@@ -65,9 +65,11 @@
 
                 <div class="flex flex-col gap-3 w-full fixed bottom-0 left-0 max-w-sm">
                     <div class="w-screen px-6">
-                        <RouterLink class="mb-10 w-full sm:w-1/2 btn-primary" to="/" @click="audio.playSound('click')">
-                            Back
-                        </RouterLink>
+                        <SoundFxEvent file="click">
+                            <RouterLink class="mb-10 w-full sm:w-1/2 btn-primary" to="/">
+                                Back
+                            </RouterLink>
+                        </SoundFxEvent>
                     </div>
                 </div>
             </div>
@@ -78,6 +80,7 @@
 <script setup>
 import {onMounted, onUnmounted, ref} from 'vue'
 import {useAudioStore} from "../stores/audioStore.js";
+import SoundFxEvent from "../components/SoundFxEvent.vue";
 
 const audio = useAudioStore();
 const scores = ref([])

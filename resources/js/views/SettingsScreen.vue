@@ -10,16 +10,17 @@
                           label="Enable Sound Fx"
                           @click.prevent="toggleSoundFx"></Checkbox>
 
-                <div :class="{'opacity-40 pointer-events-none': ! settings.playSoundFx}">
+                <div class="pb-15" :class="{'opacity-40 pointer-events-none': ! settings.playSoundFx}">
                     <div class="text-pink-200 font-semibold text-lg tracking-wide mb-4 flex gap-4 items-baseline">
                        <div>Volume</div>
-                        <EqualizerBars class="" :height="`${audio.soundFxVolume * 20}px`" :bars="5" :playing="audio.soundFxIsPlaying" />
+                        <EqualizerBars class="" :height="`${audio.soundFxVolume * 20}px`" :bars="5" :playing="audio.isSoundFxPlaying" />
                     </div>
-                    <VolumeSlider ref="soundVolumeSlider"
-                                  :initial-volume="audio.soundFxVolume"
-                                  @start-dragging="audio.playSound('retroRun', {loop: true})"
-                                  @stop-dragging="audio.stopSoundFx"
-                                  @volume-changed="(v) => audio.updateSoundFxVolume(v)" />
+                    <SoundFxEvent file="click">
+                        <VolumeSlider v-model="audio.soundFxVolume"
+                                      @start-dragging="audio.playSound('retroRun', {loop: true})"
+                                      @stop-dragging="audio.stopSoundFx"
+                                      @volume-changed="(v) => audio.updateSoundFxVolume(v)" />
+                    </SoundFxEvent>
                 </div>
 
                 <div class="settings-title">
@@ -53,18 +54,18 @@
                                    @stop="audio.stopMusic" />
                 </div>
 
-                <div :class="{'opacity-40 pointer-events-none': ! settings.playMusic}">
+                <div class="pb-15" :class="{'opacity-40 pointer-events-none': ! settings.playMusic}">
                     <div class="text-pink-200 font-semibold text-lg tracking-wide mb-4">
                         Volume
                     </div>
-                    <VolumeSlider class="mb-6"
-                                  ref="musicVolumeSlider"
-                                  :initialVolume="audio.musicVolume"
-                                  @start-dragging="audio.playMusic"
-                                  @volume-changed="(v) => audio.updateMusicVolume(v)" />
+                    <SoundFxEvent file="click">
+                        <VolumeSlider v-model="audio.musicVolume"
+                                      @start-dragging="audio.playMusic"
+                                      @volume-changed="audio.updateMusicVolume" />
+                    </SoundFxEvent>
                 </div>
 
-                <div v-if="canVibrate">
+                <div v-if="canVibrate" class="pb-15">
                     <div class="settings-title mb-4">
                         Accessibility
                     </div>
@@ -76,14 +77,16 @@
                 <div class="settings-title">
                     Data
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-15">
                     <div>
-                        <button :disabled="isClearing"
-                                class="btn-primary w-full btn-small"
-                                type="button"
-                                @click="openClearScoresModal">
-                            {{ isClearing ? 'Clearing...' : 'Clear Scoreboard' }}
-                        </button>
+                        <SoundFxEvent file="click">
+                            <button :disabled="isClearing"
+                                    class="btn-primary w-full btn-small"
+                                    type="button"
+                                    @click="showClearScoresConfirm = true">
+                                {{ isClearing ? 'Clearing...' : 'Clear Scoreboard' }}
+                            </button>
+                        </SoundFxEvent>
 
                         <Transition
                             enter-active-class="transition ease-out duration-300"
@@ -107,9 +110,11 @@
                     </div>
 
                     <div>
-                        <button :disabled="isClearing" class="btn-primary w-full btn-small" type="button" @click="openResetSettingsModal">
-                            Reset Settings
-                        </button>
+                        <SoundFxEvent file="click">
+                            <button :disabled="isClearing" class="btn-primary w-full btn-small" type="button" @click="showResetSettingsConfirm = true">
+                                Reset Settings
+                            </button>
+                        </SoundFxEvent>
                         <ConfirmModal
                             :visible="showResetSettingsConfirm"
                             message="This will reset all game settings. This does not clear scores."
@@ -123,9 +128,11 @@
             </div>
 
             <div class="pb-8">
-                <RouterLink class="btn-primary btn-glow w-full mt-12" to="/" @click="audio.playSound('click')">
-                    Back
-                </RouterLink>
+                <SoundFxEvent file="click">
+                    <RouterLink class="btn-primary btn-glow w-full mt-12" to="/">
+                        Back
+                    </RouterLink>
+                </SoundFxEvent>
             </div>
         </div>
     </div>
@@ -141,6 +148,7 @@ import VolumeSlider from "../components/VolumeSlider.vue";
 import AudioControls from "../components/AudioControls.vue";
 import MusicDropdown from "../components/MusicDropdown.vue";
 import EqualizerBars from "../components/EqualizerBars.vue";
+import SoundFxEvent from "../components/SoundFxEvent.vue";
 
 const settings = useSettingsStore();
 const audio = useAudioStore();
@@ -149,8 +157,6 @@ const isClearing = ref(false);
 const showClearScoresConfirm = ref(false);
 const showResetSettingsConfirm = ref(false);
 const message = ref(null);
-const soundVolumeSlider = ref(null);
-const musicVolumeSlider = ref(null);
 
 const toggleMusic = () => {
     audio.playSound('switch');
@@ -173,15 +179,6 @@ const toggleVibration = () => {
 const changeMusic = () => {
     audio.stopMusic();
     audio.playMusic();
-}
-
-const openClearScoresModal = () => {
-    audio.playSound('click');
-    showClearScoresConfirm.value = true
-}
-const openResetSettingsModal = () => {
-    audio.playSound('click');
-    showResetSettingsConfirm.value = true;
 }
 
 const resetSettings = () => {

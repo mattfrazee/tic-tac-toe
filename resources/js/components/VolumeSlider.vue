@@ -1,69 +1,61 @@
 <template>
-    <div class="relative w-full h-3 rounded-full cursor-pointer bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 shadow-lg"
-        @mousedown="startDrag"
-        @touchstart="startDrag"
-        ref="slider">
-        <div class="absolute top-1/2 -translate-1/2 bg-white rounded-full shadow-lg border-2 border-pink-300 transition-transform duration-150 ease-out w-6 h-6"
-            :style="{
-            left: `${volume * 100}%`,
-            transform: dragging ? 'translate(0%, 0%) scale(1.2)' : 'translate(0%, 0%) scale(1)'
-        }"></div>
+    <div ref="track"
+        class="relative w-full h-3 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 rounded-full cursor-pointer select-none touch-none"
+        @pointerdown="onPointerDown">
+        <div :style="{
+                left: `${volume * 100}%`,
+                transform: `translate(-${volume * 100}%, 0%)`
+            }"
+            class="absolute -top-1/2 w-6 h-6 bg-white rounded-full border-2 border-pink-300 shadow-lg transition-transform duration-150 ease-out will-change-transform"></div>
     </div>
 </template>
 
 <script setup>
-import {ref, watch} from 'vue'
+import {ref, watch} from "vue";
 
 const props = defineProps({
-    initialVolume: {
-        type: Number,
-        default: 0.5
-    },
-})
-const emit = defineEmits(['volume-changed', 'start-dragging', 'stop-dragging'])
-
-const volume = ref(props.initialVolume)
-const dragging = ref(false)
-const slider = ref(null)
-
-const updateVolume = (e) => {
-    const rect = slider.value.getBoundingClientRect()
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX
-    const percent = Math.min(Math.max(0, (clientX - rect.left) / rect.width), 1)
-    volume.value = percent
-    emit('volume-changed', volume.value)
-}
-
-const startDrag = (e) => {
-    emit('start-dragging')
-    dragging.value = true
-    updateVolume(e)
-    window.addEventListener('mousemove', updateVolume)
-    window.addEventListener('mouseup', stopDrag)
-    window.addEventListener('touchmove', updateVolume)
-    window.addEventListener('touchend', stopDrag)
-}
-
-const stopDrag = () => {
-    emit('stop-dragging')
-    dragging.value = false
-    window.removeEventListener('mousemove', updateVolume)
-    window.removeEventListener('mouseup', stopDrag)
-    window.removeEventListener('touchmove', updateVolume)
-    window.removeEventListener('touchend', stopDrag)
-}
-
-watch(() => props.initialVolume, (newValue, oldValue) =>{
-    // console.log(newValue, oldValue)
-    volume.value = newValue;
+    modelValue: {type: Number, default: 0.5},
 });
-</script>
 
-<style scoped>
-div[ref="slider"] {
-    transition: box-shadow 0.2s ease;
+const emit = defineEmits(["update:modelValue", 'volume-changed', 'start-dragging', 'stop-dragging']);
+
+const track = ref(null);
+const dragging = ref(false);
+const volume = ref(props.modelValue);
+
+watch(
+    () => props.modelValue,
+    (newValue) => {
+        if (!dragging.value) {
+            volume.value = newValue;
+        }
+    }
+);
+
+function updatePosition(e) {
+    const rect = track.value.getBoundingClientRect();
+    const percent = Math.min(Math.max(0, (e.clientX - rect.left) / rect.width), 1);
+    volume.value = percent;
+    emit("volume-changed", percent);
+    emit("update:modelValue", percent);
 }
-div[ref="slider"]:hover {
-    box-shadow: 0 0 15px rgba(255, 110, 196, 0.5), 0 0 25px rgba(120, 115, 245, 0.5);
+
+function onPointerDown(e) {
+    emit('start-dragging')
+    dragging.value = true;
+    e.target.setPointerCapture(e.pointerId);
+    updatePosition(e);
+
+    const move = (ev) => updatePosition(ev);
+    const up = (ev) => {
+        emit('stop-dragging')
+        dragging.value = false;
+        e.target.releasePointerCapture(e.pointerId);
+        window.removeEventListener("pointermove", move);
+        window.removeEventListener("pointerup", up);
+    };
+
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
 }
-</style>
+</script>

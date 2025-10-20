@@ -1,6 +1,9 @@
 {
     "alert": "/sfx/bomb-alert.wav",
     "click": "/sfx/click-cool-interface.wav",
+    "click2": "/sfx/click-arcade-game.wav",
+    "click3": "/sfx/click-modern-technology.wav",
+    "click4": "/sfx/click-sci-fi.wav",
     "gameOver": "/sfx/retro-game-over.wav",
     "lose": "/sfx/lose.wav",
     "move": "/sfx/move.wav",
@@ -9,5 +12,7 @@
     "retroRun": "/sfx/retro-run.wav",
     "switch": "/sfx/switch-1.wav",
     "switch2": "/sfx/switch-2.wav",
-    "win": "/sfx/win.wav"
+    "win": "/sfx/win.wav",
+    "wrong": "/sfx/wrong-answer-bass-buzzer.wav",
+    "wrong2": "/sfx/wrong-answer-fail-notification.wav"
 }

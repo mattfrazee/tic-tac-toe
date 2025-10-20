@@ -9,21 +9,24 @@
             <input v-model="o" class="form-input" placeholder="Player 2 Name (O's)"/>
             <span class="absolute w-20 left-2 top-2 text-sm p-2 rounded-lg bg-purple-200 font-bold text-purple-400">Player O</span>
         </label>
-        <div class="flex flex-col gap-4 w-full sm:w-1/2 my-10">
-            <button class="btn-primary btn-glow w-full" @click="audio.playSound('click')">
-                Start
-            </button>
-            <RouterLink class="btn-secondary w-2/3" to="/" @click="audio.playSound('click')">
-                Back
-            </RouterLink>
+        <div class="flex flex-col gap-6 w-full sm:w-1/2 my-10">
+            <SoundFxEvent file="click">
+                <button class="btn-primary btn-glow w-full">
+                    Start
+                </button>
+            </SoundFxEvent>
+            <SoundFxEvent file="click">
+                <RouterLink class="btn-secondary w-2/3 mx-auto" to="/">
+                    Back
+                </RouterLink>
+            </SoundFxEvent>
         </div>
     </form>
 </template>
 <script setup>
 import {onMounted, ref} from 'vue'
 import {useAudioStore} from "../stores/audioStore.js";
-
-const audio = useAudioStore();
+import SoundFxEvent from "./SoundFxEvent.vue";
 
 const x = ref(null)
 const o = ref(null)
