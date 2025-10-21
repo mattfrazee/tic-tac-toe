@@ -27,21 +27,24 @@
         <img alt="Tic Tac Toe" class="size-96 object-contain mb-4" src="/images/logo.png"/>
 
         <div class="flex flex-col gap-4 w-full max-w-sm">
-            <RouterLink class="btn-primary btn-glow w-full" to="/game"
-                        @click="audio.playSound('playerSelect')">
-                Play
-            </RouterLink>
-            <RouterLink class="btn-primary w-full" to="/scores"
-                        @click="audio.playSound('click')">
-                Scores
-            </RouterLink>
-            <RouterLink class="btn-primary w-full" to="/settings"
-                        @click="audio.playSound('click')">
-                Settings
-            </RouterLink>
+            <SoundFxEvent file="playerSelect">
+                <RouterLink class="btn-primary btn-glow w-full" to="/game">
+                    Play
+                </RouterLink>
+            </SoundFxEvent>
+            <SoundFxEvent file="click">
+                <RouterLink class="btn-primary w-full" to="/scores">
+                    Scores
+                </RouterLink>
+            </SoundFxEvent>
+            <SoundFxEvent file="click">
+                <RouterLink class="btn-primary w-full" to="/settings">
+                    Settings
+                </RouterLink>
+            </SoundFxEvent>
         </div>
 
-        <orientation-warning />
+        <OrientationWarning />
     </div>
 </template>
 <script setup>
@@ -49,6 +52,7 @@ import {useSettingsStore} from "../stores/settingsStore.js";
 import {useAudioStore} from '../stores/audioStore'
 import OrientationWarning from "../components/OrientationWarning.vue";
 import {onMounted, onUnmounted} from "vue";
+import SoundFxEvent from "../components/SoundFxEvent.vue";
 
 const settings = useSettingsStore();
 const audio = useAudioStore();
@@ -64,6 +68,7 @@ onUnmounted(() => document.querySelector('html').classList.remove('non-scrollabl
 </script>
 <style scoped>
 .xo {
+    /*@apply absolute text-white/60 user-select-none*/
     position: absolute;
     color: rgba(255, 255, 255, 0.6);
     text-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
@@ -73,10 +78,12 @@ onUnmounted(() => document.querySelector('html').classList.remove('non-scrollabl
 
 @keyframes xo-fall {
     0% {
+        /*@apply translate-0 rotate-0 opacity-100*/
         transform: translate(0, 0) rotate(0deg);
         opacity: 1;
     }
     100% {
+        /*@apply translat-x-[100vw] translate-y-[100vh] rotate-[360deg] opacity-100*/
         transform: translate(100vw, 100vh) rotate(360deg);
         opacity: 0;
     }

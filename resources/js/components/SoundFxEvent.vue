@@ -49,12 +49,12 @@ onMounted(() => {
     })
 })
 
-onBeforeUnmount(() => {
-    if (!el || !listeners.length) return
-
-    listeners.forEach(({ event, handler }) => {
-        el.removeEventListener(event, handler)
-    })
-    listeners = []
-})
+// onBeforeUnmount(() => {
+//     if (!el || !listeners.length) return
+//
+//     listeners.forEach(({ event, handler }) => {
+//         el.removeEventListener(event, handler)
+//     })
+//     listeners = []
+// })
 </script>

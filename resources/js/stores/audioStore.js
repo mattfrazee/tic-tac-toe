@@ -52,8 +52,9 @@ export const useAudioStore = defineStore('audio', {
 
         playSound(effect, options = {}) {
             const file = this.soundFxFiles[effect];
-            if (!file || !settings.playSoundFx || this.soundFxIsPlaying) {
-                console.log('dont playSound')
+            if (!file || !settings.playSoundFx) {
+            // if (!file || !settings.playSoundFx || this.soundFxIsPlaying) {
+            //     console.log('dont playSound')
                 return;
             }
             this.soundFx = new Howl({
@@ -66,7 +67,7 @@ export const useAudioStore = defineStore('audio', {
                 ...options
             });
             this.soundFx.play();
-            console.log('playSound')
+            // console.log('playSound')
         },
 
         stopSoundFx() {
@@ -74,7 +75,7 @@ export const useAudioStore = defineStore('audio', {
             if (this.soundFx) {
                 this.soundFx.stop();
             }
-            console.log('stopSoundFx')
+            // console.log('stopSoundFx')
         },
 
         updateSoundFxVolume(level) {
@@ -82,20 +83,8 @@ export const useAudioStore = defineStore('audio', {
             if (this.soundFx) {
                 this.soundFx.volume(level);
             }
-            console.log('updateSoundFxVolume')
+            // console.log('updateSoundFxVolume')
         },
-
-        // isAudioPlaying() {
-        //     return this.isSoundFxPlaying() || this.isMusicPlaying()
-        // },
-
-        // isSoundFxPlaying() {
-        //     return Howler._howls.filter(s => s._src.indexOf('/sfx/') === 0 && s.playing()).length > 0
-        // },
-
-        // isMusicPlaying() {
-        //     return Howler._howls.filter(s => s._src.indexOf('/music/') === 0 && s.playing()).length > 0
-        // },
 
         stopAudio() {
             this.stopSoundFx()

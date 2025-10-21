@@ -6,9 +6,11 @@
 
                 <div class="settings-title">Sound Fx</div>
 
-                <Checkbox v-model="settings.playSoundFx"
-                          label="Enable Sound Fx"
-                          @click.prevent="toggleSoundFx"></Checkbox>
+                <SoundFxEvent file="switch">
+                    <Checkbox v-model="settings.playSoundFx"
+                              label="Enable Sound Fx"
+                              @click.prevent="toggleSoundFx"></Checkbox>
+                </SoundFxEvent>
 
                 <div class="pb-15" :class="{'opacity-40 pointer-events-none': ! settings.playSoundFx}">
                     <div class="text-pink-200 font-semibold text-lg tracking-wide mb-4 flex gap-4 items-baseline">
@@ -27,9 +29,11 @@
                     Music
                 </div>
 
-                <Checkbox v-model="settings.playMusic"
-                          label="Enable Music"
-                          @click.prevent="toggleMusic"></Checkbox>
+                <SoundFxEvent file="switch">
+                    <Checkbox v-model="settings.playMusic"
+                              label="Enable Music"
+                              @click.prevent="toggleMusic"></Checkbox>
+                </SoundFxEvent>
 
                 <div class="flex gap-4 items-center" :class="{'opacity-40 pointer-events-none': ! settings.playMusic}">
                     <div class="text-pink-200 font-semibold text-lg tracking-wide">
@@ -55,8 +59,9 @@
                 </div>
 
                 <div class="pb-15" :class="{'opacity-40 pointer-events-none': ! settings.playMusic}">
-                    <div class="text-pink-200 font-semibold text-lg tracking-wide mb-4">
-                        Volume
+                    <div class="text-pink-200 font-semibold text-lg tracking-wide mb-4 flex gap-4 items-baseline">
+                        <div>Volume</div>
+                        <EqualizerBars class="" :height="`${audio.musicVolume * 20}px`" :bars="5" :playing="audio.isMusicPlaying" />
                     </div>
                     <SoundFxEvent file="click">
                         <VolumeSlider v-model="audio.musicVolume"
@@ -69,24 +74,29 @@
                     <div class="settings-title mb-4">
                         Accessibility
                     </div>
-                    <Checkbox v-model="settings.vibration"
-                              label="Use Haptics/Vibration"
-                              @click.prevent="toggleVibration" />
+                    <SoundFxEvent file="switch">
+                        <Checkbox v-model="settings.vibration"
+                                  label="Use Haptics/Vibration"
+                                  @click.prevent="toggleVibration" />
+                    </SoundFxEvent>
                 </div>
 
                 <div class="settings-title">
                     Data
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-15">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pb-15">
                     <div>
-                        <SoundFxEvent file="click">
-                            <button :disabled="isClearing"
-                                    class="btn-primary w-full btn-small"
-                                    type="button"
-                                    @click="showClearScoresConfirm = true">
-                                {{ isClearing ? 'Clearing...' : 'Clear Scoreboard' }}
-                            </button>
-                        </SoundFxEvent>
+                        <div class="flex gap-4 items-center justify-between">
+                            <p class="text-sm text-gray-400 pl-1 font-bold w-1/2">This action clears ALL saved scores.</p>
+                            <SoundFxEvent file="click">
+                                <button :disabled="isClearing"
+                                        class="btn-primary flex-grow flex-none btn-small"
+                                        type="button"
+                                        @click="showClearScoresConfirm = true">
+                                    {{ isClearing ? 'Clearing...' : 'Clear Scoreboard' }}
+                                </button>
+                            </SoundFxEvent>
+                        </div>
 
                         <Transition
                             enter-active-class="transition ease-out duration-300"
@@ -108,13 +118,16 @@
                             @confirm="clearScores"
                         />
                     </div>
-
+                    <hr class="border-gray-600 my-2">
                     <div>
-                        <SoundFxEvent file="click">
-                            <button :disabled="isClearing" class="btn-primary w-full btn-small" type="button" @click="showResetSettingsConfirm = true">
-                                Reset Settings
-                            </button>
-                        </SoundFxEvent>
+                        <div class="flex gap-4 items-center justify-between">
+                            <p class="text-sm text-gray-400 font-bold pl-1 w-1/2">This will reset all game settings. This does not clear scores.</p>
+                            <SoundFxEvent file="click">
+                                <button :disabled="isClearing" class="btn-primary btn-small flex-grow flex-none" type="button" @click="showResetSettingsConfirm = true">
+                                    Reset Settings
+                                </button>
+                            </SoundFxEvent>
+                        </div>
                         <ConfirmModal
                             :visible="showResetSettingsConfirm"
                             message="This will reset all game settings. This does not clear scores."
@@ -159,7 +172,6 @@ const showResetSettingsConfirm = ref(false);
 const message = ref(null);
 
 const toggleMusic = () => {
-    audio.playSound('switch');
     settings.toggleMusic();
     audio.stopMusic();
     if (settings.playMusic) {
@@ -167,11 +179,9 @@ const toggleMusic = () => {
     }
 }
 const toggleSoundFx = () => {
-    audio.playSound('switch');
     settings.toggleSoundFx();
 }
 const toggleVibration = () => {
-    audio.playSound('switch');
     vibrate([200, 50]);
     settings.toggleVibration();
 }

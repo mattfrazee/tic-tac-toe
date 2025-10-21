@@ -24,7 +24,7 @@
                         </RouterLink>
                     </SoundFxEvent>
                 </div>
-                <SoundFxEvent file="win" autoplay />
+                <SoundFxEvent file="win3" autoplay />
             </div>
         </div>
     </Transition>

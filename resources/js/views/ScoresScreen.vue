@@ -66,7 +66,7 @@
                 <div class="flex flex-col gap-3 w-full fixed bottom-0 left-0 max-w-sm">
                     <div class="w-screen px-6">
                         <SoundFxEvent file="click">
-                            <RouterLink class="mb-10 w-full sm:w-1/2 btn-primary" to="/">
+                            <RouterLink class="mb-10 w-full sm:mx-auto sm:w-1/2 btn-primary" to="/">
                                 Back
                             </RouterLink>
                         </SoundFxEvent>

@@ -42,9 +42,14 @@ function setNames({x, o}) {
 }
 
 function play(i) {
-    if (cells.value[i] || winner.value) return;
+    if (cells.value[i]) {
+        audio.playSound('wrong');
+    }
+    if (cells.value[i] || winner.value) {
+        return;
+    }
     cells.value[i] = turn.value;
-    audio.playSound('move');
+    audio.playSound('move3');
     check();
     turn.value = turn.value === 'X' ? 'O' : 'X';
 }

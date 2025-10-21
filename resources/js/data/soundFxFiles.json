@@ -7,12 +7,16 @@
     "gameOver": "/sfx/retro-game-over.wav",
     "lose": "/sfx/lose.wav",
     "move": "/sfx/move.wav",
+    "move2": "/sfx/quest-game-heavy-stomp.wav",
+    "move3": "/sfx/body-impact-falling-into-the-sand.wav",
     "notification": "/sfx/retro-game-notification.wav",
     "playerSelect": "/sfx/player-select.wav",
     "retroRun": "/sfx/retro-run.wav",
     "switch": "/sfx/switch-1.wav",
     "switch2": "/sfx/switch-2.wav",
     "win": "/sfx/win.wav",
+    "win2": "/sfx/small-win.wav",
+    "win3": "/sfx/winning-notification.wav",
     "wrong": "/sfx/wrong-answer-bass-buzzer.wav",
     "wrong2": "/sfx/wrong-answer-fail-notification.wav"
 }

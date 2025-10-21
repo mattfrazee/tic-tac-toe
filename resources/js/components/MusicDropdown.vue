@@ -47,7 +47,7 @@
                 </li>
             </ul>
         </transition>
-        <div class="fixed w-screen h-screen left-0 top-0" v-if="open" @click="open = false"></div>
+        <div class="fixed w-screen h-full left-0 top-0" v-if="open" @click="open = false"></div>
     </div>
 </template>
 
@@ -67,6 +67,7 @@ const open = ref(false)
 
 const toggleDropdown = () => {
     open.value = !open.value
+    document.querySelector('html').classList.toggle('dropdown-open', open.value)
 }
 
 const selectTrack = (name) => {

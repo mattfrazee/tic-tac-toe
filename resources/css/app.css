@@ -28,6 +28,13 @@ html.non-scrollable, html.non-scrollable body {
     touch-action: none;
 }
 
+html.dropdown-open {
+    @apply h-auto
+}
+html.dropdown-open body, html.dropdown-open #app {
+    @apply h-full touch-auto overscroll-auto;
+}
+
 html.safe-area .safe-area-container {
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
