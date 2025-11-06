@@ -19,7 +19,7 @@ class ClearGamesCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Clear all game and move data from the database';
+    protected $description = 'Clear all games, moves and player stats data from the database';
 
     /**
      * Execute the console command.
@@ -27,7 +27,7 @@ class ClearGamesCommand extends Command
     public function handle(): int
     {
         if (! $this->option('force')) {
-            if (! $this->confirm('⚠️  This will delete ALL games and moves. Are you sure you want to continue?')) {
+            if (! $this->confirm('⚠️  This will delete ALL games, moves and player stats. Are you sure you want to continue?')) {
                 $this->info('Operation cancelled.');
                 return self::SUCCESS;
             }
@@ -35,7 +35,8 @@ class ClearGamesCommand extends Command
 
         DB::table('moves')->truncate();
         DB::table('games')->truncate();
-        $this->info('✅ All game and move records have been cleared successfully.');
+        DB::table('player_stats')->truncate();
+        $this->info('✅ All games, moves, and player stats have been removed successfully.');
 
         return self::SUCCESS;
     }
