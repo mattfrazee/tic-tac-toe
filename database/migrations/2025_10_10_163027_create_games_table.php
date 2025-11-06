@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\PlayerMark;
+use App\Enums\WinnerResult;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,12 +14,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('games', function (Blueprint $table) {
-            $table->id();
-            $table->string('player_x_name');
-            $table->string('player_o_name');
-            $table->enum('first_player', ['X','O']);
-            $table->enum('winner', ['X','O','draw'])->nullable();
+            $table->id('game_id');
+            $table->string('player_x_name')->nullable();
+            $table->string('player_o_name')->nullable();
+            $table->foreignId('player_x_id')->nullable()->constrained('players','player_id');
+            $table->foreignId('player_o_id')->nullable()->constrained('players','player_id');
+            $table->enum('first_player', PlayerMark::values())->nullable();
+            $table->enum('winner', WinnerResult::values())->nullable();
             $table->unsignedTinyInteger('board_size')->default(3);
+            $table->boolean('vs_computer')->default(false);
+            $table->foreignId('room_code_id')->nullable()->constrained('room_codes','room_code_id');
+            $table->boolean('is_online')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });
