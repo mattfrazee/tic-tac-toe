@@ -52,9 +52,8 @@ export const useAudioStore = defineStore('audio', {
 
         playSound(effect, options = {}) {
             const file = this.soundFxFiles[effect];
-            if (!file || !settings.playSoundFx) {
             // if (!file || !settings.playSoundFx || this.soundFxIsPlaying) {
-            //     console.log('dont playSound')
+            if (!file || !settings.playSoundFx) {
                 return;
             }
             this.soundFx = new Howl({
@@ -67,7 +66,6 @@ export const useAudioStore = defineStore('audio', {
                 ...options
             });
             this.soundFx.play();
-            // console.log('playSound')
         },
 
         stopSoundFx() {
@@ -75,7 +73,6 @@ export const useAudioStore = defineStore('audio', {
             if (this.soundFx) {
                 this.soundFx.stop();
             }
-            // console.log('stopSoundFx')
         },
 
         updateSoundFxVolume(level) {
@@ -83,12 +80,12 @@ export const useAudioStore = defineStore('audio', {
             if (this.soundFx) {
                 this.soundFx.volume(level);
             }
-            // console.log('updateSoundFxVolume')
         },
 
         stopAudio() {
             this.stopSoundFx()
             this.stopMusic()
+            Howler.stop()
         },
 
         playMusic(trackKey, options = {}) {

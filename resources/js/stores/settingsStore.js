@@ -1,8 +1,11 @@
 import { defineStore } from 'pinia'
+import {DifficultyLevel} from "../enums/difficultyLevel.js";
 
 export const useSettingsStore = defineStore('settings', {
     state: () => ({
         startedApp: false,
+        vsComputer: false,
+        difficulty: localStorage.getItem('difficulty') ?? DifficultyLevel.MEDIUM,
         playSoundFx: JSON.parse(localStorage.getItem('playSoundFx') ?? 'true'),
         playMusic: JSON.parse(localStorage.getItem('playMusic') ?? 'true'),
         loopMusic: JSON.parse(localStorage.getItem('loopMusic') ?? 'true'),
@@ -12,6 +15,8 @@ export const useSettingsStore = defineStore('settings', {
     actions: {
         resetState() {
             // this.startedApp = false;
+            // this.vsComputer = false;
+            this.difficulty = DifficultyLevel.MEDIUM;
             this.playSoundFx = true;
             this.playMusic = true;
             this.loopMusic = true;
@@ -37,8 +42,12 @@ export const useSettingsStore = defineStore('settings', {
 });
 
 useSettingsStore().$subscribe((mutation, state) => {
-    const keysToSave = ['playMusic', 'playSoundFx', 'loopMusic', 'vibration']
+    const keysToSave = ['playMusic', 'playSoundFx', 'loopMusic', 'vibration', 'difficulty']
     keysToSave.forEach(key => {
-        localStorage.setItem(key, JSON.stringify(state[key]))
+        if (typeof(state[key]) === 'string') {
+            localStorage.setItem(key, state[key])
+        } else {
+            localStorage.setItem(key, JSON.stringify(state[key]))
+        }
     })
 });
