@@ -36,7 +36,7 @@
                 </SoundFxEvent>
 
                 <div class="flex gap-4 items-center" :class="{'opacity-40 pointer-events-none': ! settings.playMusic}">
-                    <div class="text-pink-200 font-semibold text-lg tracking-wide">
+                    <div class="text-pink-200 font-bold text-lg tracking-wide">
                         Track:
                     </div>
                     <MusicDropdown v-model="audio.currentMusic"
@@ -55,7 +55,7 @@
                                    @prev="audio.previousTrack"
                                    @pause="audio.pauseMusic"
                                    @play="audio.playMusic"
-                                   @stop="audio.stopMusic" />
+                                   @stop="audio.stopAudio" />
                 </div>
 
                 <div class="pb-15" :class="{'opacity-40 pointer-events-none': ! settings.playMusic}">
@@ -119,7 +119,7 @@
                         />
                     </div>
                     <hr class="border-gray-600 my-2">
-                    <div>
+                    <div class="mb-16">
                         <div class="flex gap-4 items-center justify-between">
                             <p class="text-sm text-gray-400 font-bold pl-1 w-1/2">This will reset all game settings. This does not clear scores.</p>
                             <SoundFxEvent file="click">
@@ -140,9 +140,9 @@
 
             </div>
 
-            <div class="pb-8">
+            <div class="flex flex-col gap-3 w-full fixed bottom-0 left-1/2 -translate-x-1/2 max-w-sm">
                 <SoundFxEvent file="click">
-                    <RouterLink class="btn-primary btn-glow w-full mt-12" to="/">
+                    <RouterLink class="mb-8 w-full sm:mx-auto sm:w-1/2 btn-primary" to="/">
                         Back
                     </RouterLink>
                 </SoundFxEvent>

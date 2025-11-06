@@ -3,7 +3,7 @@
         <div v-if="! settings.startedApp"
              class="h-screen absolute inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-purple-600 via-pink-500 to-pink-400 text-white"
              @click="startGame">
-            <span class="block text-6xl font-extrabold animate-pulse drop-shadow-[0_0_10px_rgba(255,192,203,0.8)] text-center leading-tight">
+            <span class="block text-6xl font-bold animate-pulse drop-shadow-[0_0_10px_rgba(255,192,203,0.8)] text-center leading-tight tracking-tighter">
                 ✨<br/>
                 Tap to Start
                 <br/>✨
@@ -27,13 +27,20 @@
         <img alt="Tic Tac Toe" class="size-96 object-contain mb-4" src="/images/logo.png"/>
 
         <div class="flex flex-col gap-4 w-full max-w-sm">
+
+            <div class="inline-block mx-auto">
+                <CreateRoom />
+            </div>
+            <div class="inline-block mx-auto">
+                <DestoryExpiredRoomCodesButton/>
+            </div>
             <SoundFxEvent file="playerSelect">
                 <RouterLink class="btn-primary btn-glow w-full" to="/game">
                     Play
                 </RouterLink>
             </SoundFxEvent>
             <SoundFxEvent file="click">
-                <RouterLink class="btn-primary w-full" to="/scores">
+                <RouterLink class="btn-primary font-bold w-full" to="/scores">
                     Scores
                 </RouterLink>
             </SoundFxEvent>
@@ -53,6 +60,8 @@ import {useAudioStore} from '../stores/audioStore'
 import OrientationWarning from "../components/OrientationWarning.vue";
 import {onMounted, onUnmounted} from "vue";
 import SoundFxEvent from "../components/SoundFxEvent.vue";
+import CreateRoom from "../components/CreateRoom.vue";
+import DestoryExpiredRoomCodesButton from "../components/DestoryExpiredRoomCodesButton.vue";
 
 const settings = useSettingsStore();
 const audio = useAudioStore();
