@@ -29,7 +29,7 @@
             <ul v-if="open"
                 class="absolute left-0 right-0 mt-2 bg-[rgba(40,0,60,0.95)] rounded-2xl shadow-2xl overflow-auto max-h-[400px] z-50 border-2 border-pink-400/40 backdrop-blur-md
                        ring-1 ring-pink-400/30">
-                <li v-for="(path, name) in options" :key="name"
+                <li v-for="(item, name) in options" :key="name"
                     :class="{
                         'text-pink-400 bg-purple-600/50': label === name,
                         'text-white bg-purple-950/50': label !== name,
@@ -42,7 +42,7 @@
                         outline-none focus-visible:ring-2 focus-visible:ring-pink-400/70
                         drop-shadow-[0_2px_12px_rgba(236,72,255,0.10)]"
                     style="box-shadow: 0 0 0 2px rgba(180,40,255,0.07) inset, 0 0 10px 2px rgba(236,72,255,0.12);"
-                    @click="selectTrack(name)">
+                    @click="selectTrack(name, item.path || item)">
                     {{ name }}
                 </li>
             </ul>
@@ -70,9 +70,9 @@ const toggleDropdown = () => {
     document.querySelector('html').classList.toggle('dropdown-open', open.value)
 }
 
-const selectTrack = (name) => {
+const selectTrack = (name, path) => {
     emit('update:modelValue', name)
-    emit('change', name)
+    emit('change', { name, path })
     open.value = false
 }
 

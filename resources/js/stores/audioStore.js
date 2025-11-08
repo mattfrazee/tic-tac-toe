@@ -1,6 +1,7 @@
 import {defineStore} from 'pinia'
 import {Howl} from 'howler'
 import {useSettingsStore} from "./settingsStore.js";
+// import musicFiles from '../data/musicFilesTest.json'
 import musicFiles from '../data/musicFiles.json'
 import soundFxFiles from '../data/soundFxFiles.json'
 
@@ -99,8 +100,11 @@ export const useAudioStore = defineStore('audio', {
             if (this.musicFiles[trackKey]) {
                 this.currentMusic = trackKey;
             }
+            const track = this.musicFiles[this.currentMusic]
+            const trackPath = typeof track === 'object' && track.path ? track.path : track
             this.music = new Howl({
-                src: [this.musicFiles[this.currentMusic]],
+                // src: [this.musicFiles[this.currentMusic]],
+                src: [trackPath],
                 volume: this.musicVolume,
                 onpause: () => {
                     this.musicIsPlaying = false

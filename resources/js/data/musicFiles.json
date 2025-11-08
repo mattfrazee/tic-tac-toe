@@ -1,21 +1,162 @@
 {
-  "A Love Affair": "/music/a-love-affair-small.mp3",
-  "Almost Game Time": "/music/almost-game-time-small.mp3",
-  "Billy The Kid": "/music/billy-the-kid-small.mp3",
-  "Cyberpunk City": "/music/cyberpunk-city-small.mp3",
-  "Deep Urban": "/music/deep-urban-small.mp3",
-  "Dirty Thinkin": "/music/dirty-thinkin-small.mp3",
-  "Dry Gin": "/music/dry-gin-small.mp3",
-  "Fun Jazz": "/music/fun-jazz-small.mp3",
-  "Games Music": "/music/games-music-small.mp3",
-  "Golden Gate Hip Hop": "/music/golden-gate-hip-hop-small.mp3",
-  "Hooligans": "/music/hooligans-small.mp3",
-  "Howling Under The Moon": "/music/howling-under-the-moon-small.mp3",
-  "Jazz": "/music/jazz-small.mp3",
-  "Move Your Body": "/music/move-your-body-small.mp3",
-  "Nature Yoga": "/music/nature-yoga-small.mp3",
-  "Sci Fi Game": "/music/sci-fi-game-small.mp3",
-  "Vampires In The City": "/music/vampires-in-the-city-small.mp3",
-  "Walking Dead": "/music/walking-dead-small.mp3",
-  "You Got Jazz": "/music/you-got-jazz-small.mp3"
+    "A Love Affair": {
+        "path": "/music/a-love-affair.mp3",
+        "format": "mp3",
+        "bitrate": "96k",
+        "sampleRate": 44100,
+        "channels": 2,
+        "sizeKB": 1237.1
+    },
+    "Almost Game Time": {
+        "path": "/music/almost-game-time.mp3",
+        "format": "mp3",
+        "bitrate": "96k",
+        "sampleRate": 44100,
+        "channels": 2,
+        "sizeKB": 1168.3
+    },
+    "Billy The Kid": {
+        "path": "/music/billy-the-kid.mp3",
+        "format": "mp3",
+        "bitrate": "96k",
+        "sampleRate": 44100,
+        "channels": 2,
+        "sizeKB": 1236.2
+    },
+    "Cyberpunk City": {
+        "path": "/music/cyberpunk-city.mp3",
+        "format": "mp3",
+        "bitrate": "96k",
+        "sampleRate": 44100,
+        "channels": 2,
+        "sizeKB": 1169.4
+    },
+    "Deep Urban": {
+        "path": "/music/deep-urban.mp3",
+        "format": "mp3",
+        "bitrate": "96k",
+        "sampleRate": 44100,
+        "channels": 2,
+        "sizeKB": 3384.2
+    },
+    "Dirty Thinkin": {
+        "path": "/music/dirty-thinkin.mp3",
+        "format": "mp3",
+        "bitrate": "96k",
+        "sampleRate": 44100,
+        "channels": 2,
+        "sizeKB": 1045.5
+    },
+    "Dry Gin": {
+        "path": "/music/dry-gin.mp3",
+        "format": "mp3",
+        "bitrate": "96k",
+        "sampleRate": 44100,
+        "channels": 2,
+        "sizeKB": 1272.3
+    },
+    "Fun Jazz": {
+        "path": "/music/fun-jazz.mp3",
+        "format": "mp3",
+        "bitrate": "96k",
+        "sampleRate": 44100,
+        "channels": 2,
+        "sizeKB": 1648.5
+    },
+    "Games Music": {
+        "path": "/music/games-music.mp3",
+        "format": "mp3",
+        "bitrate": "96k",
+        "sampleRate": 44100,
+        "channels": 2,
+        "sizeKB": 1387.4
+    },
+    "Golden Gate Hip Hop": {
+        "path": "/music/golden-gate-hip-hop.mp3",
+        "format": "mp3",
+        "bitrate": "96k",
+        "sampleRate": 44100,
+        "channels": 2,
+        "sizeKB": 1329.5
+    },
+    "Hooligans": {
+        "path": "/music/hooligans.mp3",
+        "format": "mp3",
+        "bitrate": "96k",
+        "sampleRate": 44100,
+        "channels": 2,
+        "sizeKB": 1184.7
+    },
+    "Howling Under The Moon": {
+        "path": "/music/howling-under-the-moon.mp3",
+        "format": "mp3",
+        "bitrate": "96k",
+        "sampleRate": 44100,
+        "channels": 2,
+        "sizeKB": 1463.6
+    },
+    "Jazz": {
+        "path": "/music/jazz.mp3",
+        "format": "mp3",
+        "bitrate": "96k",
+        "sampleRate": 44100,
+        "channels": 2,
+        "sizeKB": 1599.8
+    },
+    "Move Your Body": {
+        "path": "/music/move-your-body.mp3",
+        "format": "mp3",
+        "bitrate": "96k",
+        "sampleRate": 44100,
+        "channels": 2,
+        "sizeKB": 1150.1
+    },
+    "Nature Yoga": {
+        "path": "/music/nature-yoga.mp3",
+        "format": "mp3",
+        "bitrate": "96k",
+        "sampleRate": 44100,
+        "channels": 2,
+        "sizeKB": 1264
+    },
+    "Sci Fi Game": {
+        "path": "/music/sci-fi-game.mp3",
+        "format": "mp3",
+        "bitrate": "96k",
+        "sampleRate": 44100,
+        "channels": 2,
+        "sizeKB": 1177.1
+    },
+    "To The Next Round": {
+        "path": "/music/to-the-next-round.mp3",
+        "format": "mp3",
+        "bitrate": "96k",
+        "sampleRate": 44100,
+        "channels": 2,
+        "sizeKB": 1481.1
+    },
+    "Vampires In The City": {
+        "path": "/music/vampires-in-the-city.mp3",
+        "format": "mp3",
+        "bitrate": "96k",
+        "sampleRate": 44100,
+        "channels": 2,
+        "sizeKB": 1167.6
+    },
+    "Walking Dead": {
+        "path": "/music/walking-dead.mp3",
+        "format": "mp3",
+        "bitrate": "96k",
+        "sampleRate": 44100,
+        "channels": 2,
+        "sizeKB": 1434.2
+    },
+    "You Got Jazz": {
+        "path": "/music/you-got-jazz.mp3",
+        "format": "mp3",
+        "bitrate": "96k",
+        "sampleRate": 44100,
+        "channels": 2,
+        "sizeKB": 1169.1
+    }
 }
