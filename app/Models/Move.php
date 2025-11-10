@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PlayerMark;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -54,6 +55,30 @@ class Move extends Model
         'turn',
         'is_computer',
     ];
+
+    protected $casts = [
+        'game_id' => 'int',
+        'mark' => PlayerMark::class,
+        'row' => 'int',
+        'col' => 'int',
+        'turn' => 'int',
+        'is_computer' => 'boolean',
+    ];
+
+    public function scopeComputer(Builder $query): Builder
+    {
+        return $query->where('is_computer', true);
+    }
+
+    public function scopeHuman(Builder $query): Builder
+    {
+        return $query->where('is_computer', false);
+    }
+
+    public function isComputerMove(): bool
+    {
+        return (bool) $this->is_computer;
+    }
 
     public function game(): BelongsTo
     {

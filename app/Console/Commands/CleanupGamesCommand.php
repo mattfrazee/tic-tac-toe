@@ -48,6 +48,11 @@ class CleanupGamesCommand extends Command
             ->where('deleted_at', '<', $hardDeleteThreshold)
             ->get();
 
+        if (! $softCandidates->count() && ! $hardCandidates->count()) {
+            $this->info("\nNothing to delete.");
+            return self::SUCCESS;
+        }
+
         $this->info("🧹 Games Cleanup Summary:");
         $this->line("• Soft delete threshold: {$softDays} day(s)");
         $this->line("• Hard delete threshold: {$hardDays} day(s)");
@@ -78,9 +83,9 @@ class CleanupGamesCommand extends Command
             $hardDeleted++;
         }
 
-        $this->info("✅ Cleanup complete!");
         $this->line("• Soft-deleted: {$softDeleted}");
         $this->line("• Permanently deleted: {$hardDeleted}");
+        $this->info("✅ Cleanup complete!");
 
         return self::SUCCESS;
     }

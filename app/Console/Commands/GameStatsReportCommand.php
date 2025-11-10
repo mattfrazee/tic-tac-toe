@@ -36,7 +36,7 @@ class GameStatsReportCommand extends Command
         $path = base_path($this->option('path'));
         $includeBots = $this->option('include-bots');
 
-        $this->info('🎮 Generating Player Stats Report...');
+        $this->info('🎮  Generating Player Stats Report...');
 
         // Build query
         $query = PlayerStat::query()
@@ -50,7 +50,7 @@ class GameStatsReportCommand extends Command
         $players = $query->get();
 
         if ($players->isEmpty()) {
-            $this->warn('No players found.');
+            $this->warn("\nNo players found.");
             return;
         }
 

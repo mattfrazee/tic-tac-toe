@@ -42,8 +42,8 @@ class ClearDataCommand extends Command
         $tablesToClear = [];
 
         if ($only === 'all' || $only === 'games') {
-            $tablesToClear[] = 'games';
             $tablesToClear[] = 'moves';
+            $tablesToClear[] = 'games';
         }
         if ($only === 'all' || $only === 'rooms') {
             $tablesToClear[] = 'room_codes';

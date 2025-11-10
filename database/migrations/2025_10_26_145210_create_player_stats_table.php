@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\DifficultyLevel;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,13 +14,17 @@ return new class extends Migration
     {
         Schema::create('player_stats', function (Blueprint $table) {
             $table->id('player_stat_id');
-            //$table->foreignId('player_id')->nullable();
-            $table->string('name')->unique();
-            $table->integer('games_played')->default(0);
-            $table->integer('games_won')->default(0);
-            $table->integer('games_lost')->default(0);
+            $table->foreignId('player_id')->nullable()->constrained('players', 'player_id')->nullOnDelete();
+            $table->string('name')->index();
+            $table->boolean('is_computer')->default(false)->index();
+            $table->enum('difficulty', DifficultyLevel::values())->nullable();
+            $table->unsignedInteger('games_played')->default(0);
+            $table->unsignedInteger('games_won')->default(0);
+            $table->unsignedInteger('games_lost')->default(0);
+            $table->unsignedInteger('games_drawn')->default(0);
             $table->timestamps();
             $table->softDeletes();
+            $table->unique(['name', 'is_computer', 'difficulty'], 'unique_player_difficulty');
         });
     }
 
