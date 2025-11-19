@@ -13,13 +13,12 @@ return new class extends Migration
     {
         Schema::create('players', function (Blueprint $table) {
             $table->id('player_id');
-            $table->string('name')->unique();
-            $table->string('email')->nullable()->unique();
-            $table->boolean('is_computer')->default(false);
-            $table->string('difficulty')->nullable();
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->string('nickname')->unique()->nullable();
+            $table->string('email')->unique()->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->index(['is_computer', 'difficulty']);
         });
     }
 

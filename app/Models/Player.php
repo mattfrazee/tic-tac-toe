@@ -34,6 +34,12 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Player whereName($value)
  * @method static Builder<static>|Player wherePlayerId($value)
  * @method static Builder<static>|Player whereUpdatedAt($value)
+ * @property string|null $first_name
+ * @property string|null $last_name
+ * @property string|null $nickname
+ * @method static Builder<static>|Player whereFirstName($value)
+ * @method static Builder<static>|Player whereLastName($value)
+ * @method static Builder<static>|Player whereNickname($value)
  * @mixin Eloquent
  */
 class Player extends Model

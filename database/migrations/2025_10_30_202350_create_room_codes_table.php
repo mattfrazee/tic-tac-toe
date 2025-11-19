@@ -14,6 +14,11 @@ return new class extends Migration
         Schema::create('room_codes', function (Blueprint $table) {
             $table->id('room_code_id');
             $table->string('code', 6)->unique();
+            $table->unsignedInteger('active_players')->default(0);
+            $table->string('player_x_name')->nullable();
+            $table->string('player_o_name')->nullable();
+            $table->foreignId('player_x_id')->nullable()->constrained('players','player_id');
+            $table->foreignId('player_o_id')->nullable()->constrained('players','player_id');
             $table->date('expires_on')->nullable();
             $table->timestamps();
             $table->softDeletes();

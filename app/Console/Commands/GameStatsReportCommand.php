@@ -16,8 +16,7 @@ class GameStatsReportCommand extends Command
     protected $signature = 'game:stats-report
         {--limit=10 : Number of top players to display}
         {--export= : Export format (json|csv)}
-        {--path=storage/app/reports/leaderboard.json : Output path for export file}
-        {--include-bots : Include computer players in the report}';
+        {--path=storage/app/reports/leaderboard.json : Output path for export file}';
 
     /**
      * The console command description.
@@ -34,13 +33,11 @@ class GameStatsReportCommand extends Command
         $limit = (int)$this->option('limit');
         $export = $this->option('export');
         $path = base_path($this->option('path'));
-        $includeBots = $this->option('include-bots');
 
         $this->info('🎮  Generating Player Stats Report...');
 
         // Build query
         $query = PlayerStat::query()
-            ->when(!$includeBots, fn($q) => $q->where('is_computer', false))
             ->where('games_played', '>', 0)
             ->orderByRaw('(games_won * 1.0 / NULLIF(games_played, 0)) DESC')
             ->orderByDesc('games_won')
@@ -56,7 +53,7 @@ class GameStatsReportCommand extends Command
 
         // Display console table
         $this->table(
-            ['#', 'Player', 'Played', 'Won', 'Lost', 'Win %', 'Loss %', 'Bot?'],
+            ['#', 'Player', 'Played', 'Won', 'Lost', 'Win %', 'Loss %'],
             $players->map(function ($p, $i) {
                 return [
                     $i + 1,
@@ -66,7 +63,6 @@ class GameStatsReportCommand extends Command
                     $p->games_lost,
                     number_format($p->win_percentage, 1),
                     number_format($p->loss_percentage, 1),
-                    $p->is_computer ? '🤖' : '👤',
                 ];
             })
         );
@@ -81,7 +77,6 @@ class GameStatsReportCommand extends Command
                 'games_lost' => $p->games_lost,
                 'win_percentage' => $p->win_percentage,
                 'loss_percentage' => $p->loss_percentage,
-                'is_computer' => $p->is_computer,
             ])->values()->toArray();
 
             File::ensureDirectoryExists(dirname($path));

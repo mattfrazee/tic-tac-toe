@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\DifficultyLevel;
 use App\Enums\PlayerMark;
 use App\Enums\WinnerResult;
 use Eloquent;
@@ -16,21 +17,24 @@ use Illuminate\Support\Carbon;
 
 /**
  * @property int $game_id
- * @property string $player_x_name
- * @property string $player_o_name
+ * @property int|null $room_code_id
  * @property int|null $player_x_id
  * @property int|null $player_o_id
- * @property PlayerMark $first_player
+ * @property string|null $player_x_name
+ * @property string|null $player_o_name
+ * @property PlayerMark|null $first_player
  * @property WinnerResult|null $winner
  * @property int $board_size
  * @property bool $vs_computer
- * @property int|null $room_code_id
- * @property int $is_online
+ * @property string|null $difficulty
+ * @property bool $is_online
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  * @property-read Collection<int, Move> $moves
  * @property-read int|null $moves_count
+ * @property-read Player|null $player_x
+ * @property-read Player|null $player_y
  * @property-read RoomCode|null $room_code
  * @method static Builder<static>|Game newModelQuery()
  * @method static Builder<static>|Game newQuery()
@@ -39,6 +43,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Game whereBoardSize($value)
  * @method static Builder<static>|Game whereCreatedAt($value)
  * @method static Builder<static>|Game whereDeletedAt($value)
+ * @method static Builder<static>|Game whereDifficulty(DifficultyLevel $value)
  * @method static Builder<static>|Game whereFirstPlayer($value)
  * @method static Builder<static>|Game whereGameId($value)
  * @method static Builder<static>|Game whereIsOnline($value)
@@ -61,17 +66,21 @@ class Game extends Model
     protected $primaryKey = 'game_id';
 
     protected $fillable = [
+        'room_code_id',
+        'player_x_id',
+        'player_o_id',
         'player_x_name',
         'player_o_name',
         'first_player',
         'winner',
         'board_size',
         'vs_computer',
+        'difficulty',
         'is_online',
-        'room_code_id',
     ];
 
     protected $casts = [
+        'difficulty' => DifficultyLevel::class,
         'first_player' => PlayerMark::class,
         'winner' => WinnerResult::class,
         'vs_computer' => 'boolean',
@@ -86,5 +95,15 @@ class Game extends Model
     public function room_code(): HasOne
     {
         return $this->hasOne(RoomCode::class, 'room_code_id', 'room_code_id');
+    }
+
+    public function player_x(): HasOne
+    {
+        return $this->hasOne(Player::class, 'player_id', 'player_x_id');
+    }
+
+    public function player_y(): HasOne
+    {
+        return $this->hasOne(Player::class, 'player_id', 'player_y_id');
     }
 }

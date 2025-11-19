@@ -14,15 +14,17 @@ use Illuminate\Support\Carbon;
 /**
  * @property int $move_id
  * @property int $game_id
- * @property string $mark
+ * @property PlayerMark $mark
  * @property int $row
  * @property int $col
  * @property int $turn
- * @property int $is_computer
+ * @property bool $is_computer
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
- * @property-read \App\Models\Game|null $game
+ * @property-read Game $game
+ * @method static Builder<static>|Move computer()
+ * @method static Builder<static>|Move human()
  * @method static Builder<static>|Move newModelQuery()
  * @method static Builder<static>|Move newQuery()
  * @method static Builder<static>|Move onlyTrashed()
